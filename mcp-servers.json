@@ -5,5 +5,32 @@
       "command": "npx",
       "args": ["chrome-devtools-mcp@latest", "--no-usage-statistics"]
     }
+  },
+  "competitive-landscape": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "competitor-analysis": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "keyword-clustering": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "keyword-research": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "link-prospecting": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "local-seo": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "seo-audit": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "seo-coach": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "seo-project-setup": {
+    "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
   }
 }

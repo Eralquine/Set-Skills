@@ -43,6 +43,23 @@ bash install.sh --project /ruta/a/mi-proyecto
 | Skill | Qué hace | Requiere |
 |---|---|---|
 | [`plasmic-designer`](skills/plasmic-designer/SKILL.md) | Controla Plasmic Studio (editor visual) vía Chrome DevTools MCP para crear/editar componentes, páginas y layouts | MCP server `chrome-devtools` (se agrega solo al instalar), sesión iniciada en Plasmic Studio la primera vez |
+| [`competitive-landscape`](skills/competitive-landscape/SKILL.md) | Mapea líderes del mercado SEO, temas de contenido ganadores, cobertura de keywords, backlinks y brechas estratégicas | Cuenta de OpenSEO ([openseo.so](https://openseo.so)) |
+| [`competitor-analysis`](skills/competitor-analysis/SKILL.md) | Analiza el tráfico orgánico, keywords, contenido y backlinks de un competidor puntual | Cuenta de OpenSEO |
+| [`keyword-clustering`](skills/keyword-clustering/SKILL.md) | Agrupa keywords por intención y las mapea a páginas existentes o propuestas | Cuenta de OpenSEO |
+| [`keyword-research`](skills/keyword-research/SKILL.md) | Descubre oportunidades de keywords, evalúa métricas/SERPs y guarda/etiqueta términos | Cuenta de OpenSEO |
+| [`link-prospecting`](skills/link-prospecting/SKILL.md) | Encuentra prospectos de link building, vías de contacto y redacta outreach | Cuenta de OpenSEO |
+| [`local-seo`](skills/local-seo/SKILL.md) | Audita un Google Business Profile y compara visibilidad en Maps contra competidores locales | Cuenta de OpenSEO |
+| [`seo-audit`](skills/seo-audit/SKILL.md) | Audita un sitio y entrega un reporte de una página con una sola acción prioritaria de la semana | Cuenta de OpenSEO |
+| [`seo-coach`](skills/seo-coach/SKILL.md) | Modo coach de OpenSEO: explica workflows y recomienda siguientes pasos | Cuenta de OpenSEO |
+| [`seo-project-setup`](skills/seo-project-setup/SKILL.md) | Llena el contexto compartido del proyecto (sitio, metas, competidores, páginas clave) y valida el MCP/Search Console | Cuenta de OpenSEO |
+
+Las 9 skills de OpenSEO comparten el mismo MCP server hosteado (`openseo`,
+`https://app.openseo.so/mcp`), agregado automáticamente por `install.sh`. La
+primera vez que Claude use una herramienta de OpenSEO te va a pedir
+autenticarte por OAuth con tu cuenta de [openseo.so](https://openseo.so). El
+paquete de skills es gratis y open source, pero el uso del servidor hosteado
+requiere cuenta y créditos (ver [openseo.so/pricing](https://openseo.so/pricing));
+también se puede self-hostear (ver el [repo original](https://github.com/every-app/open-seo#self-hosting)).
 
 ## Agregar una nueva skill a esta colección
 
