@@ -57,6 +57,7 @@ bash install.sh --project /ruta/a/mi-proyecto
 | [`seo-coach`](skills/seo-coach/SKILL.md) | Modo coach de OpenSEO: explica workflows y recomienda siguientes pasos | Cuenta de OpenSEO |
 | [`seo-project-setup`](skills/seo-project-setup/SKILL.md) | Llena el contexto compartido del proyecto (sitio, metas, competidores, páginas clave) y valida el MCP/Search Console | Cuenta de OpenSEO |
 | [`api-finder`](skills/api-finder/SKILL.md) | Sugiere APIs públicas/gratis reales para lo que necesites (clima, animales, finanzas, geocoding, etc.) en vez de inventar endpoints | Ninguno — datos curados de [public-apis/public-apis](https://github.com/public-apis/public-apis) |
+| [`graphify`](skills/graphify/SKILL.md) | Convierte cualquier carpeta (código, docs, PDFs, imágenes, video) en un grafo de conocimiento navegable: `graphify query "..."`, `graphify path A B`, `graphify explain "X"` | Se instala solo la primera vez (`uv tool install graphifyy` o `pip install graphifyy`); el análisis de código es local, pero el análisis semántico de docs/imágenes necesita una API key de LLM (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.) |
 
 Las 9 skills de OpenSEO comparten el mismo MCP server hosteado (`openseo`,
 `https://app.openseo.so/mcp`), agregado automáticamente por `install.sh`. La
@@ -65,6 +66,26 @@ autenticarte por OAuth con tu cuenta de [openseo.so](https://openseo.so). El
 paquete de skills es gratis y open source, pero el uso del servidor hosteado
 requiere cuenta y créditos (ver [openseo.so/pricing](https://openseo.so/pricing));
 también se puede self-hostear (ver el [repo original](https://github.com/every-app/open-seo#self-hosting)).
+
+### Demo: el catálogo de `api-finder` como grafo
+
+Para probar `graphify` de una vez, convertimos las 1773 APIs de `api-finder`
+en un grafo navegable — categoría → API → tipo de auth — en
+`skills/api-finder/references/graph/`:
+
+- `graph.html` — visor interactivo (D3, self-contained, ábrelo en cualquier navegador): filtra por categoría, busca por nombre, click en un nodo para ver URL/descripción/auth.
+- `graph.json` — el grafo completo (1829 nodos, 3546 conexiones) para consultarlo por código.
+- `GRAPH_REPORT.md` — resumen: categorías con más APIs, desglose por tipo de auth.
+
+**Nota honesta:** el pipeline normal de `graphify` sobre un `.md` usa un LLM
+para la pasada semántica (necesita `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.,
+que no había disponible en esta sesión). Como los datos de `api-finder` ya
+venían estructurados (categoría, auth, URL — nada que inferir), en vez de eso
+construí el grafo directo desde `apis.json` con el mismo esquema de nodos/edges
+que usa `graphify` (`EXTRACTED` en cada conexión, sin nada inferido). Si en tu
+ROG tienes una API key de LLM configurada, puedes correr el pipeline real de
+`graphify` sobre carpetas de docs/PDFs/imágenes y sí te va a hacer inferencia
+semántica de verdad.
 
 ## Plugins completos incluidos
 

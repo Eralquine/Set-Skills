@@ -49,4 +49,19 @@ Weather.
   production-facing (uptime/rate-limit guarantees matter); the lesser-known
   entries are fine for prototypes, side projects, and one-off scripts.
 
-Full data: `references/apis.md`.
+## Data formats
+
+- `references/apis.md` — the full list as markdown tables (grep this by
+  default, per the workflow above).
+- `references/apis.json` — the same 1773 APIs as flat records
+  (`category`, `name`, `url`, `description`, `auth`, `https`, `cors`), for
+  when you'd rather filter/aggregate with `jq` or a script than grep markdown.
+- `references/graph/` — the same data as a graph (category → API → auth),
+  built with the `graphify` skill's schema (`EXTRACTED` edges, no LLM
+  inference needed since the data is already structured):
+  - `graph.json` — nodes/edges, queryable by code.
+  - `graph.html` — open in a browser for an interactive, filterable view.
+  - `GRAPH_REPORT.md` — category and auth-type breakdown at a glance.
+  Prefer this over re-scanning `apis.md` when the user wants an overview
+  (e.g. "¿cuál categoría tiene más opciones sin auth?") rather than a lookup
+  for one specific need.
