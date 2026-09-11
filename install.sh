@@ -4,23 +4,26 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 SKILLS_SRC="$SCRIPT_DIR/skills"
 MCP_MANIFEST="$SCRIPT_DIR/mcp-servers.json"
+PLUGINS_MANIFEST="$SCRIPT_DIR/plugins.json"
 
 SKILLS_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MCP_CONFIG="${CLAUDE_MCP_CONFIG:-$HOME/.claude/.mcp.json}"
+PLUGINS_DIR="${CLAUDE_PLUGINS_DIR:-$HOME/.claude-plugins}"
 
 usage() {
   cat <<'EOF'
-Uso: install.sh [--project <ruta>] [skill1 skill2 ...]
+Uso: install.sh [--project <ruta>] [nombre1 nombre2 ...]
 
-Sin argumentos: instala todas las skills del repo en ~/.claude/skills
-(disponibles en cualquier proyecto de esta máquina).
+Sin argumentos: instala todas las skills sueltas en ~/.claude/skills y
+clona/actualiza todos los plugins completos en ~/.claude-plugins.
 
-  --project <ruta>   Instala en <ruta>/.claude/skills en vez de ~/.claude/skills
-  skill1 skill2 ...   Instala solo esas skills (por nombre de carpeta)
+  --project <ruta>   Instala las skills en <ruta>/.claude/skills en vez de ~/.claude/skills
+  nombre1 nombre2 ...   Instala/clona solo esas skills o plugins (por nombre)
 
 Variables de entorno:
-  CLAUDE_SKILLS_DIR   Sobrescribe el destino de las skills
+  CLAUDE_SKILLS_DIR   Sobrescribe el destino de las skills sueltas
   CLAUDE_MCP_CONFIG   Sobrescribe la ruta del .mcp.json a fusionar
+  CLAUDE_PLUGINS_DIR  Sobrescribe el destino de los plugins completos
 EOF
 }
 
@@ -67,11 +70,10 @@ for dir in "$SKILLS_SRC"/*/; do
 done
 
 if [[ ${#INSTALLED[@]} -eq 0 ]]; then
-  echo "No se instaló ninguna skill (¿nombre incorrecto?)." >&2
-  exit 1
+  echo "(Ninguna skill suelta coincide con lo pedido; revisando plugins completos...)" >&2
 fi
 
-if [[ -f "$MCP_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
+if [[ ${#INSTALLED[@]} -gt 0 ]] && [[ -f "$MCP_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
   mkdir -p "$(dirname "$MCP_CONFIG")"
   NAMES_JSON=$(printf '%s\n' "${INSTALLED[@]}" | node -e '
     const names = require("fs").readFileSync(0, "utf8").trim().split("\n").filter(Boolean);
@@ -108,10 +110,60 @@ if [[ -f "$MCP_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
       console.log(`✔ MCP servers agregados a ${configPath}: ${added.join(", ")}`);
     }
 NODE
-else
+elif [[ ${#INSTALLED[@]} -gt 0 ]]; then
   echo "Nota: no se pudo fusionar mcp-servers.json (falta node o el manifest); revisa manualmente si tus skills necesitan un MCP server." >&2
 fi
 
-echo ""
-echo "Listo. Skills instaladas: ${INSTALLED[*]}"
-echo "Reinicia Claude Code (o abre una sesión nueva) para que las detecte."
+if [[ ${#INSTALLED[@]} -gt 0 ]]; then
+  echo ""
+  echo "Listo. Skills instaladas: ${INSTALLED[*]}"
+  echo "Reinicia Claude Code (o abre una sesión nueva) para que las detecte."
+fi
+
+PLUGINS_MATCHED=()
+if [[ -f "$PLUGINS_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
+  mkdir -p "$PLUGINS_DIR"
+  PLUGIN_NAMES=$(node -e '
+    const m = require(process.argv[1]);
+    console.log(Object.keys(m).join("\n"));
+  ' "$PLUGINS_MANIFEST")
+
+  echo ""
+  while IFS= read -r pname; do
+    [[ -z "$pname" ]] && continue
+    if [[ ${#SELECTED[@]} -gt 0 ]]; then
+      match=0
+      for s in "${SELECTED[@]}"; do
+        [[ "$s" == "$pname" ]] && match=1
+      done
+      [[ $match -eq 0 ]] && continue
+    fi
+
+    repo=$(node -e '
+      const m = require(process.argv[1]);
+      console.log(m[process.argv[2]].repo);
+    ' "$PLUGINS_MANIFEST" "$pname")
+    entry=$(node -e '
+      const m = require(process.argv[1]);
+      console.log(m[process.argv[2]].entryCommand || "");
+    ' "$PLUGINS_MANIFEST" "$pname")
+    dest="$PLUGINS_DIR/$pname"
+
+    if [[ -d "$dest/.git" ]]; then
+      echo "↻ Actualizando plugin $pname en $dest"
+      git -C "$dest" pull --ff-only
+    else
+      echo "↓ Clonando plugin $pname en $dest"
+      rm -rf "$dest"
+      git clone --depth 1 "$repo" "$dest"
+    fi
+
+    echo "  Para usarlo: claude --plugin-dir \"$dest\"$( [[ -n "$entry" ]] && echo " (luego $entry)")"
+    PLUGINS_MATCHED+=("$pname")
+  done <<< "$PLUGIN_NAMES"
+fi
+
+if [[ ${#INSTALLED[@]} -eq 0 ]] && [[ ${#PLUGINS_MATCHED[@]} -eq 0 ]]; then
+  echo "No se instaló ninguna skill ni plugin (¿nombre incorrecto?)." >&2
+  exit 1
+fi

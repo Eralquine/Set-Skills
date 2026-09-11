@@ -4,9 +4,13 @@ Colección personal de skills de Claude Code, juntadas aquí para poder instalar
 de golpe en cualquier máquina (incluyendo el ROG) con un solo comando.
 
 Este repo **no se usa como skill directamente** — es el punto de reunión. Cada
-skill vive en `skills/<nombre>/` con su propio `SKILL.md`, y `install.sh` las
-copia a `~/.claude/skills` (o a un proyecto puntual) en la máquina donde lo
-corras.
+skill suelta vive en `skills/<nombre>/` con su propio `SKILL.md`, y `install.sh`
+las copia a `~/.claude/skills` (o a un proyecto puntual) en la máquina donde lo
+corras. Además soporta **plugins completos** de Claude Code (con agents,
+commands y hooks propios) listados en `plugins.json`: para esos, `install.sh`
+clona/actualiza el repo del plugin en `~/.claude-plugins/<nombre>` en vez de
+copiar archivos sueltos, porque un plugin completo necesita que Claude Code lo
+cargue como unidad.
 
 ## Instalar todas las skills (uso normal en el ROG)
 
@@ -61,10 +65,28 @@ paquete de skills es gratis y open source, pero el uso del servidor hosteado
 requiere cuenta y créditos (ver [openseo.so/pricing](https://openseo.so/pricing));
 también se puede self-hostear (ver el [repo original](https://github.com/every-app/open-seo#self-hosting)).
 
-## Agregar una nueva skill a esta colección
+## Plugins completos incluidos
+
+| Plugin | Qué hace | Cómo se usa |
+|---|---|---|
+| [`pagokit`](https://github.com/hainrixz/agente-pagokit) | Agente que elige el proveedor de pagos correcto para tu proyecto y genera la integración completa (checkout, webhook autenticado, migración de DB, portal de cliente, reembolsos) con hooks que **bloquean** escrituras inseguras (secrets en texto plano, montos mal calculados, webhooks sin verificar) | `install.sh` lo clona en `~/.claude-plugins/pagokit`; para usarlo corre `claude --plugin-dir ~/.claude-plugins/pagokit` y luego `/pagokit:start` |
+
+`install.sh` clona cada plugin la primera vez y hace `git pull` en las
+siguientes corridas, así que `git pull && bash install.sh` en el ROG también
+actualiza los plugins.
+
+## Agregar una nueva skill o plugin a esta colección
+
+**Skill suelta** (solo un `SKILL.md` autocontenido):
 
 1. Crea `skills/<nombre>/SKILL.md` (y cualquier `references/` que necesite).
 2. Si necesita un MCP server, agrégalo en `mcp-servers.json` bajo la clave
    `<nombre>`.
-3. Documéntala en la tabla de arriba.
-4. Commit y push — el siguiente `git pull && install.sh` en el ROG la recoge.
+3. Documéntala en la tabla de skills.
+
+**Plugin completo** (trae agents/commands/hooks propios):
+
+1. Agrégalo a `plugins.json`: `{"repo": "...", "description": "...", "entryCommand": "/algo"}`.
+2. Documéntalo en la tabla de plugins.
+
+Luego commit y push — el siguiente `git pull && install.sh` en el ROG lo recoge.

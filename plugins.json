@@ -1,0 +1,7 @@
+{
+  "pagokit": {
+    "repo": "https://github.com/hainrixz/agente-pagokit",
+    "description": "PagoKit — agente de integración de pagos con validadores deterministas (hooks) que bloquean escrituras inseguras.",
+    "entryCommand": "/pagokit:start"
+  }
+}
