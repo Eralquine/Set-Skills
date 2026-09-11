@@ -3,5 +3,10 @@
     "repo": "https://github.com/hainrixz/agente-pagokit",
     "description": "PagoKit — agente de integración de pagos con validadores deterministas (hooks) que bloquean escrituras inseguras.",
     "entryCommand": "/pagokit:start"
+  },
+  "firecrawl": {
+    "repo": "https://github.com/firecrawl/skills",
+    "description": "Catálogo oficial de Firecrawl: scraping/crawling/búsqueda web a markdown listo para LLM. ~17 skills (core: scrape/search/crawl/map/interact/agent/monitor/parse/download; build: integrar la API a tu código) más MCP server propio incluido.",
+    "entryCommand": ""
   }
 }

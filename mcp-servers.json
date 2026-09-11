@@ -32,5 +32,12 @@
   },
   "seo-project-setup": {
     "openseo": { "type": "http", "url": "https://app.openseo.so/mcp" }
+  },
+  "codebase-memory-mcp": {
+    "codebase-memory-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "codebase-memory-mcp"]
+    }
   }
 }

@@ -14,7 +14,12 @@ cargue como unidad. También soporta **project templates** listados en
 `templates.json`: repos que no se instalan sino que se clonan frescos cada
 vez que arrancas un proyecto nuevo de ese tipo (`install.sh new <template>
 <destino>`), porque son el proyecto en sí (con su propio venv, node_modules,
-config), no algo que se agregue a un proyecto existente.
+config), no algo que se agregue a un proyecto existente. Y una cuarta
+categoría, **self-installers** (`self-installers.json`): repos que se
+instalan a sí mismos clonándose directo en `~/.claude/skills/<nombre>` y
+corriendo su propio script de setup — `install.sh` los clona/actualiza ahí,
+pero no corre el setup por ti (pueden necesitar dependencias como Bun que no
+asumimos instaladas).
 
 ## Instalar todas las skills (uso normal en el ROG)
 
@@ -64,6 +69,9 @@ bash install.sh --project /ruta/a/mi-proyecto
 | [`graphify`](skills/graphify/SKILL.md) | Convierte cualquier carpeta (código, docs, PDFs, imágenes, video) en un grafo de conocimiento navegable: `graphify query "..."`, `graphify path A B`, `graphify explain "X"` | Se instala solo la primera vez (`uv tool install graphifyy` o `pip install graphifyy`); el análisis de código es local, pero el análisis semántico de docs/imágenes necesita una API key de LLM (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.) |
 | [`nvidia-nim`](skills/nvidia-nim/SKILL.md) | Endpoints reales de NVIDIA NIM (build.nvidia.com) listos para usar sin re-descubrirlos cada vez: chat/LLM, embeddings, reranking, visión, generación de imágenes, TTS/ASR, biología (BioNeMo) — con specs OpenAPI completas incluidas | API key `nvapi-...` gratis en [build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys) (1000 créditos gratis, 40 req/min) |
 | [`omnivoice`](skills/omnivoice/SKILL.md) | TTS zero-shot multilingüe (600+ idiomas): clona una voz desde un audio de referencia de 3-10s, o diséñala por atributos (género, edad, tono, acento, dialecto) | Local — sin API key, pero necesita GPU (o Apple Silicon/Intel Arc) y PyTorch; descarga el modelo de Hugging Face la primera vez |
+| [`penpot`](skills/penpot/SKILL.md) | Lee/edita archivos de diseño de Penpot (alternativa open-source a Figma): componentes, tokens, estilos, capas; exporta assets; diseño-a-código | MCP server oficial `@penpot/mcp` — modo remoto necesita cuenta Penpot + MCP key (Your account → Integrations → MCP Server); modo local no necesita nada |
+| [`turso`](skills/turso/SKILL.md) | Consulta/modifica un archivo `.db` SQLite local en lenguaje natural (listar tablas, queries, inserts, cambios de schema) | Binario `tursodb` (se instala con un curl), sin auth — se registra por proyecto con `claude mcp add ... -- tursodb <db> --mcp` |
+| [`codebase-memory-mcp`](skills/codebase-memory-mcp/SKILL.md) | Indexa un repo (162 lenguajes, tree-sitter) en un grafo de conocimiento persistente y local; consultas de arquitectura/dependencias en vez de re-grepear todo cada sesión | Binario nativo auto-instalable (self-configura Claude Code solo), o vía `npx`/`uvx` sin instalar nada — sin API key, todo local |
 
 Las 9 skills de OpenSEO comparten el mismo MCP server hosteado (`openseo`,
 `https://app.openseo.so/mcp`), agregado automáticamente por `install.sh`. La
@@ -98,6 +106,7 @@ semántica de verdad.
 | Plugin | Qué hace | Cómo se usa |
 |---|---|---|
 | [`pagokit`](https://github.com/hainrixz/agente-pagokit) | Agente que elige el proveedor de pagos correcto para tu proyecto y genera la integración completa (checkout, webhook autenticado, migración de DB, portal de cliente, reembolsos) con hooks que **bloquean** escrituras inseguras (secrets en texto plano, montos mal calculados, webhooks sin verificar) | `install.sh` lo clona en `~/.claude-plugins/pagokit`; para usarlo corre `claude --plugin-dir ~/.claude-plugins/pagokit` y luego `/pagokit:start` |
+| [`firecrawl`](https://github.com/firecrawl/skills) | Catálogo oficial de Firecrawl (scraping/crawling/búsqueda web a markdown listo para LLM): ~17 skills — primitivas (`scrape`/`search`/`crawl`/`map`/`interact`/`agent`/`monitor`/`parse`/`download`) y guías de integración de API — más su MCP server propio | `install.sh` lo clona en `~/.claude-plugins/firecrawl`; corre `claude --plugin-dir ~/.claude-plugins/firecrawl`. Necesita `FIRECRAWL_API_KEY` (`fc-...` en [firecrawl.dev](https://firecrawl.dev)) para todo excepto scrape/search/parse básicos |
 
 `install.sh` clona cada plugin la primera vez y hace `git pull` en las
 siguientes corridas, así que `git pull && bash install.sh` en el ROG también
@@ -108,13 +117,51 @@ actualiza los plugins.
 | Template | Qué es | Cómo se usa |
 |---|---|---|
 | [`openmontage`](https://github.com/calesthio/OpenMontage) | Sistema de producción de video agéntico: describís el video en lenguaje natural y el agente investiga, escribe el guion, genera imágenes/video/música/narración, edita y renderiza (Remotion). 50+ skills propias (video gen con Veo/Kling/Seedance, TTS, música, ffmpeg, Three.js, etc.) | `bash install.sh new openmontage ~/proyectos/mi-video`, luego `cd` ahí y `make setup` (necesita Python 3.10+, FFmpeg, Node 18+) |
+| [`daily-stock-analysis`](https://github.com/ZhuLinsen/daily_stock_analysis) | Analiza acciones diariamente (A-share/HK/US/JP/KR/TW) con IA: cotizaciones+noticias+fundamentales → dashboard de decisión (compra/venta, riesgos) → push a WeChat Work/Feishu/Telegram/Discord/email. CLI + API REST + web + desktop | `bash install.sh new daily-stock-analysis ~/proyectos/stocks`, `pip install -r requirements.txt`, configura `.env` (mínimo 1 API key de LLM + `STOCK_LIST`), `python main.py --schedule` o Docker/GitHub Actions para correrlo diario |
 
 A diferencia de skills/plugins, esto **no se instala globalmente** — cada
 `install.sh new` te da una copia fresca del template lista para un proyecto
 nuevo. API keys de proveedores (FAL, ElevenLabs, etc.) se configuran en el
 `.env` de esa copia, no en esta colección.
 
-## Agregar una nueva skill, plugin, o template a esta colección
+## Self-installers incluidos
+
+| Self-installer | Qué es | Cómo se usa |
+|---|---|---|
+| [`gstack`](https://github.com/garrytan/gstack) | 23 skills + 8 power tools de Garry Tan (YC) que arman un "equipo de ingeniería virtual" en Claude Code: `/office-hours`, `/plan-ceo-review`, `/review`, `/qa` (con browser real), `/cso` (auditoría OWASP+STRIDE), `/ship`, etc. | `install.sh` lo clona en `~/.claude/skills/gstack`; después corres tú `cd ~/.claude/skills/gstack && ./setup` (necesita Bun v1.0+, compila su propio binario de browser) |
+
+A diferencia de las skills sueltas (que copiamos como contenido estático),
+estos repos se clonan completos porque su propio script de instalación
+necesita compilar binarios o generar configuración — `install.sh` los deja
+clonados y actualizados, pero el `./setup` (o equivalente) lo corres tú,
+porque puede necesitar dependencias que no asumimos instaladas.
+
+## Qué se evaluó y se dejó fuera (y por qué)
+
+Para que quede explícito por qué algunos repos que se pidieron agregar no
+están arriba:
+
+- **[bytedance/deer-flow](https://github.com/bytedance/deer-flow)** — es una
+  aplicación completa auto-hosteada (backend LangGraph + frontend Next.js +
+  DB propia + Docker Compose), no algo que se invoque desde dentro de Claude
+  Code. Su única pieza agent-facing (`claude-to-deerflow`) es un shim HTTP
+  que solo sirve si ya tienes la plataforma completa corriendo aparte —no
+  vale la pena para esta colección.
+- **[firecrawl/firecrawl](https://github.com/firecrawl/firecrawl)** (el repo
+  principal) — es el producto/API en sí, no algo que se copie a
+  `~/.claude/skills`. Lo que sí vale la pena está en `firecrawl/skills`
+  (arriba, como plugin).
+- **[mukul975/anthropic-cybersecurity-skills](https://github.com/mukul975/anthropic-cybersecurity-skills)**
+  — 818 skills de seguridad (no afiliado a Anthropic pese al nombre; el
+  README lo aclara). Bien gobernado y con framing de autorización consistente
+  en las skills dual-use (pentesting/red-team), pero 818 es demasiado para
+  importar en bloque a una colección personal, y las skills ofensivas no
+  deberían quedar siempre cargadas sin saber si de verdad haces engagements
+  autorizados. Pendiente: decir qué dominios te interesan (DFIR/blue-team
+  específicamente, o también red-team porque hacés pentesting autorizado) y
+  las agrego seleccionadas en vez de todo el catálogo.
+
+## Agregar una nueva skill, plugin, template o self-installer a esta colección
 
 **Skill suelta** (solo un `SKILL.md` autocontenido):
 
@@ -132,5 +179,10 @@ nuevo. API keys de proveedores (FAL, ElevenLabs, etc.) se configuran en el
 
 1. Agrégalo a `templates.json`: `{"repo": "...", "description": "...", "setupCommand": "..."}`.
 2. Documéntalo en la tabla de templates.
+
+**Self-installer** (se clona directo en `~/.claude/skills/<nombre>` y corre su propio setup):
+
+1. Agrégalo a `self-installers.json`: `{"repo": "...", "description": "...", "setupCommand": "..."}`.
+2. Documéntalo en la tabla de self-installers.
 
 Luego commit y push — el siguiente `git pull && install.sh` en el ROG lo recoge.

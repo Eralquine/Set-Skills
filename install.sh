@@ -6,6 +6,7 @@ SKILLS_SRC="$SCRIPT_DIR/skills"
 MCP_MANIFEST="$SCRIPT_DIR/mcp-servers.json"
 PLUGINS_MANIFEST="$SCRIPT_DIR/plugins.json"
 TEMPLATES_MANIFEST="$SCRIPT_DIR/templates.json"
+SELF_INSTALLERS_MANIFEST="$SCRIPT_DIR/self-installers.json"
 
 SKILLS_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MCP_CONFIG="${CLAUDE_MCP_CONFIG:-$HOME/.claude/.mcp.json}"
@@ -16,11 +17,14 @@ usage() {
 Uso: install.sh [--project <ruta>] [nombre1 nombre2 ...]
      install.sh new <template> <destino>
 
-Sin argumentos: instala todas las skills sueltas en ~/.claude/skills y
-clona/actualiza todos los plugins completos en ~/.claude-plugins.
+Sin argumentos: instala todas las skills sueltas en ~/.claude/skills, clona/
+actualiza todos los plugins completos en ~/.claude-plugins, y clona/actualiza
+los self-installers (self-installers.json) directo en ~/.claude/skills/<nombre>
+(quedan pendientes de que corras tú su propio setup — necesitan dependencias
+propias como Bun que no asumimos instaladas).
 
   --project <ruta>   Instala las skills en <ruta>/.claude/skills en vez de ~/.claude/skills
-  nombre1 nombre2 ...   Instala/clona solo esas skills o plugins (por nombre)
+  nombre1 nombre2 ...   Instala/clona solo esas skills, plugins o self-installers (por nombre)
   new <template> <destino>   Clona un project template (templates.json) fresco en <destino>
                               (no toca ~/.claude/skills ni ~/.claude-plugins — son proyectos
                               completos que se clonan una vez por cada nuevo proyecto)
@@ -197,7 +201,50 @@ if [[ -f "$PLUGINS_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
   done <<< "$PLUGIN_NAMES"
 fi
 
-if [[ ${#INSTALLED[@]} -eq 0 ]] && [[ ${#PLUGINS_MATCHED[@]} -eq 0 ]]; then
-  echo "No se instaló ninguna skill ni plugin (¿nombre incorrecto?)." >&2
+SELF_INSTALLERS_MATCHED=()
+if [[ -f "$SELF_INSTALLERS_MANIFEST" ]] && command -v node >/dev/null 2>&1; then
+  mkdir -p "$SKILLS_DIR"
+  SI_NAMES=$(node -e '
+    const m = require(process.argv[1]);
+    console.log(Object.keys(m).join("\n"));
+  ' "$SELF_INSTALLERS_MANIFEST")
+
+  echo ""
+  while IFS= read -r siname; do
+    [[ -z "$siname" ]] && continue
+    if [[ ${#SELECTED[@]} -gt 0 ]]; then
+      match=0
+      for s in "${SELECTED[@]}"; do
+        [[ "$s" == "$siname" ]] && match=1
+      done
+      [[ $match -eq 0 ]] && continue
+    fi
+
+    repo=$(node -e '
+      const m = require(process.argv[1]);
+      console.log(m[process.argv[2]].repo);
+    ' "$SELF_INSTALLERS_MANIFEST" "$siname")
+    setupCmd=$(node -e '
+      const m = require(process.argv[1]);
+      console.log(m[process.argv[2]].setupCommand || "");
+    ' "$SELF_INSTALLERS_MANIFEST" "$siname")
+    dest="$SKILLS_DIR/$siname"
+
+    if [[ -d "$dest/.git" ]]; then
+      echo "↻ Actualizando $siname en $dest"
+      git -C "$dest" pull --ff-only
+    else
+      echo "↓ Clonando $siname en $dest (se instala a sí mismo, no se copia como las demás skills)"
+      rm -rf "$dest"
+      git clone --depth 1 "$repo" "$dest"
+    fi
+
+    echo "  Pendiente (manual, necesita sus propias dependencias): cd \"$dest\" && $setupCmd"
+    SELF_INSTALLERS_MATCHED+=("$siname")
+  done <<< "$SI_NAMES"
+fi
+
+if [[ ${#INSTALLED[@]} -eq 0 ]] && [[ ${#PLUGINS_MATCHED[@]} -eq 0 ]] && [[ ${#SELF_INSTALLERS_MATCHED[@]} -eq 0 ]]; then
+  echo "No se instaló ninguna skill, plugin, ni self-installer (¿nombre incorrecto?)." >&2
   exit 1
 fi

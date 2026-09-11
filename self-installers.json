@@ -1,0 +1,7 @@
+{
+  "gstack": {
+    "repo": "https://github.com/garrytan/gstack",
+    "description": "23 skills + 8 power tools que convierten Claude Code en un equipo de ingeniería virtual (CEO review, eng review, design review, /review, /ship, /qa con browser real, /cso security audit, etc.) por Garry Tan (YC).",
+    "setupCommand": "./setup   # requiere Bun v1.0+; compila su propio binario de browser"
+  }
+}
