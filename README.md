@@ -56,6 +56,7 @@ bash install.sh --project /ruta/a/mi-proyecto
 | [`seo-audit`](skills/seo-audit/SKILL.md) | Audita un sitio y entrega un reporte de una página con una sola acción prioritaria de la semana | Cuenta de OpenSEO |
 | [`seo-coach`](skills/seo-coach/SKILL.md) | Modo coach de OpenSEO: explica workflows y recomienda siguientes pasos | Cuenta de OpenSEO |
 | [`seo-project-setup`](skills/seo-project-setup/SKILL.md) | Llena el contexto compartido del proyecto (sitio, metas, competidores, páginas clave) y valida el MCP/Search Console | Cuenta de OpenSEO |
+| [`api-finder`](skills/api-finder/SKILL.md) | Sugiere APIs públicas/gratis reales para lo que necesites (clima, animales, finanzas, geocoding, etc.) en vez de inventar endpoints | Ninguno — datos curados de [public-apis/public-apis](https://github.com/public-apis/public-apis) |
 
 Las 9 skills de OpenSEO comparten el mismo MCP server hosteado (`openseo`,
 `https://app.openseo.so/mcp`), agregado automáticamente por `install.sh`. La
