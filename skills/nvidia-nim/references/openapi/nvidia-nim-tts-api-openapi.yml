@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR TTS API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: TTS
+  description: Text-to-speech synthesis
+paths:
+  /v1/audio/speech:
+    post:
+      summary: Synthesize Speech
+      description: Generate WAV/MP3 audio from text using a Riva TTS NIM (e.g. Magpie-TTS, FastPitch).
+      operationId: createSpeech
+      tags:
+      - TTS
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - input
+              - voice
+              properties:
+                model:
+                  type: string
+                  example: nvidia/magpie-tts
+                input:
+                  type: string
+                  description: Text to synthesize.
+                voice:
+                  type: string
+                  example: en-US.Female-1
+                response_format:
+                  type: string
+                  enum:
+                  - mp3
+                  - wav
+                  - opus
+                  - flac
+                  default: mp3
+                speed:
+                  type: number
+                  default: 1.0
+      responses:
+        '200':
+          description: Synthesized audio bytes.
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request.
+        '401':
+          description: Missing or invalid API key.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

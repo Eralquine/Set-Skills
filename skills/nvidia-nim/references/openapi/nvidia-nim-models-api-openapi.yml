@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR Models API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Models
+  description: Model discovery operations
+paths:
+  /v1/models:
+    get:
+      summary: List Available Models
+      description: Return the list of models exposed by this NIM endpoint or container.
+      operationId: listModels
+      tags:
+      - Models
+      responses:
+        '200':
+          description: Model list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelList'
+        '401':
+          description: Missing or invalid API key.
+  /v1/models/{model_id}:
+    get:
+      summary: Retrieve A Model
+      description: Return metadata for a single model id.
+      operationId: getModel
+      tags:
+      - Models
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Model object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+        '404':
+          description: Model not found.
+components:
+  schemas:
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          example: meta/llama-3.3-70b-instruct
+        object:
+          type: string
+          example: model
+        created:
+          type: integer
+        owned_by:
+          type: string
+          example: meta
+        root:
+          type: string
+        permission:
+          type: array
+          items:
+            type: object
+    ModelList:
+      type: object
+      properties:
+        object:
+          type: string
+          example: list
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

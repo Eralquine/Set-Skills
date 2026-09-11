@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR Health API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Health
+  description: Liveness, readiness, and metrics probes
+paths:
+  /v1/health/live:
+    get:
+      summary: Liveness Probe
+      description: Returns 200 OK if the container process is alive. Used as Kubernetes livenessProbe.
+      operationId: getLiveness
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Container is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '503':
+          description: Container is unhealthy and should be restarted.
+  /v1/health/ready:
+    get:
+      summary: Readiness Probe
+      description: Returns 200 OK only once the model engine has loaded and the container can accept traffic.
+      operationId: getReadiness
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Ready to serve.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        '503':
+          description: Not ready yet (e.g. model still loading).
+  /v1/metrics:
+    get:
+      summary: Prometheus Metrics
+      description: Prometheus text exposition format. Includes GPU utilization, request latency histograms, queue depth, and engine-specific counters.
+      operationId: getMetrics
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Prometheus metrics payload.
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Service is live.
+        object:
+          type: string
+          example: health-response
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

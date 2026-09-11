@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR Completions API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Completions
+  description: Legacy text completion operations
+paths:
+  /v1/completions:
+    post:
+      summary: Create A Text Completion
+      description: Generate a text completion from a raw prompt against a supported NIM-served model.
+      operationId: createCompletion
+      tags:
+      - Completions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletionRequest'
+      responses:
+        '200':
+          description: Completion response (or SSE stream when stream=true).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletionResponse'
+        '400':
+          description: Invalid request.
+        '401':
+          description: Missing or invalid API key.
+        '429':
+          description: Rate limit exceeded.
+components:
+  schemas:
+    CompletionRequest:
+      type: object
+      required:
+      - model
+      - prompt
+      properties:
+        model:
+          type: string
+        prompt:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        max_tokens:
+          type: integer
+          default: 1024
+        temperature:
+          type: number
+          default: 0.2
+        top_p:
+          type: number
+          default: 0.7
+        n:
+          type: integer
+          default: 1
+        stream:
+          type: boolean
+          default: false
+        stop:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        seed:
+          type: integer
+        frequency_penalty:
+          type: number
+        presence_penalty:
+          type: number
+        echo:
+          type: boolean
+        logprobs:
+          type: integer
+    CompletionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          example: text_completion
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              index:
+                type: integer
+              finish_reason:
+                type: string
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

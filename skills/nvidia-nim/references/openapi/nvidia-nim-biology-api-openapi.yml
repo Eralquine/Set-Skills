@@ -1,0 +1,183 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM (BioNeMo) ASR Biology API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Biology
+  description: Protein, molecule, and structural-biology operations
+paths:
+  /v1/biology/nvidia/alphafold2/predict-structure-from-sequence:
+    post:
+      summary: Predict Protein Structure
+      description: Predict the 3D structure of a protein from its amino acid sequence using AlphaFold2 NIM.
+      operationId: predictProteinStructure
+      tags:
+      - Biology
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - sequence
+              properties:
+                sequence:
+                  type: string
+                  description: Single-letter amino acid sequence.
+                databases:
+                  type: array
+                  items:
+                    type: string
+                  description: MSA databases to use (e.g. `uniref90`, `mgnify`, `small_bfd`).
+                relax_prediction:
+                  type: boolean
+                  default: true
+      responses:
+        '200':
+          description: Predicted structure.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pdbs:
+                    type: array
+                    items:
+                      type: string
+                      description: PDB-format structure.
+        '400':
+          description: Invalid sequence.
+        '401':
+          description: Missing or invalid API key.
+  /v1/biology/mit/diffdock:
+    post:
+      summary: Dock Ligand To Protein
+      description: Predict the binding pose of a small molecule ligand against a protein using DiffDock NIM.
+      operationId: dockLigand
+      tags:
+      - Biology
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - protein
+              - ligand
+              properties:
+                protein:
+                  type: string
+                  description: PDB-format protein structure.
+                ligand:
+                  type: string
+                  description: SDF or SMILES ligand representation.
+                num_poses:
+                  type: integer
+                  default: 10
+                time_divisions:
+                  type: integer
+                  default: 20
+                steps:
+                  type: integer
+                  default: 18
+      responses:
+        '200':
+          description: Predicted binding poses.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ligand_positions:
+                    type: array
+                    items:
+                      type: string
+                  position_confidence:
+                    type: array
+                    items:
+                      type: number
+        '400':
+          description: Invalid input.
+  /v1/biology/nvidia/molmim/generate:
+    post:
+      summary: Generate Small Molecules
+      description: Generate small molecule SMILES around a seed molecule using NVIDIA MolMIM NIM.
+      operationId: generateMolecules
+      tags:
+      - Biology
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - smi
+              properties:
+                smi:
+                  type: string
+                  description: Seed SMILES string.
+                algorithm:
+                  type: string
+                  enum:
+                  - CMA-ES
+                num_molecules:
+                  type: integer
+                  default: 10
+                property_name:
+                  type: string
+                  enum:
+                  - QED
+                  - plogP
+                minimize:
+                  type: boolean
+                min_similarity:
+                  type: number
+                  default: 0.3
+                particles:
+                  type: integer
+                  default: 30
+                iterations:
+                  type: integer
+                  default: 10
+      responses:
+        '200':
+          description: Generated molecules.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  generated:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sample:
+                          type: string
+                        score:
+                          type: number
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

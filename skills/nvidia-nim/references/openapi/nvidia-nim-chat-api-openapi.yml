@@ -1,0 +1,256 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR Chat API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Chat
+  description: OpenAI-compatible chat completion operations
+paths:
+  /v1/chat/completions:
+    post:
+      summary: Create A Chat Completion
+      description: 'Generate a chat completion for the supplied messages. Compatible with the OpenAI chat completions schema; supports streaming via Server-Sent Events when `stream: true` is set, tool/function calling, JSON-mode structured outputs, and (on VLM models) image inputs inside the messages array.
+
+        '
+      operationId: createChatCompletion
+      tags:
+      - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: Chat completion response (or SSE stream when stream=true).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionResponse'
+            text/event-stream:
+              schema:
+                type: string
+                description: 'SSE stream of `data:` JSON deltas terminated by `data: [DONE]`.'
+        '400':
+          description: Invalid request.
+        '401':
+          description: Missing or invalid API key.
+        '403':
+          description: API key lacks access to the requested model.
+        '404':
+          description: Requested model not found in this endpoint's catalog.
+        '429':
+          description: Rate limit or quota exceeded.
+        '500':
+          description: Upstream inference error.
+components:
+  schemas:
+    ChatCompletionRequest:
+      type: object
+      required:
+      - model
+      - messages
+      properties:
+        model:
+          type: string
+          description: Model identifier (e.g. `meta/llama-3.3-70b-instruct`, `nvidia/llama-3.1-nemotron-70b-instruct`).
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+          default: 0.2
+        top_p:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.7
+        max_tokens:
+          type: integer
+          minimum: 1
+          default: 1024
+        stream:
+          type: boolean
+          default: false
+        stop:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        n:
+          type: integer
+          minimum: 1
+          default: 1
+        seed:
+          type: integer
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+        tool_choice:
+          oneOf:
+          - type: string
+            enum:
+            - auto
+            - none
+            - required
+          - type: object
+        response_format:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - text
+              - json_object
+              - json_schema
+            json_schema:
+              type: object
+        frequency_penalty:
+          type: number
+        presence_penalty:
+          type: number
+    ChatMessage:
+      type: object
+      required:
+      - role
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              $ref: '#/components/schemas/ContentPart'
+        name:
+          type: string
+        tool_calls:
+          type: array
+          items:
+            $ref: '#/components/schemas/ToolCall'
+        tool_call_id:
+          type: string
+    ChatCompletionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          example: chat.completion
+        created:
+          type: integer
+        model:
+          type: string
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+              message:
+                $ref: '#/components/schemas/ChatMessage'
+              finish_reason:
+                type: string
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+    ContentPart:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - text
+          - image_url
+        text:
+          type: string
+        image_url:
+          type: object
+          properties:
+            url:
+              type: string
+              description: HTTPS URL or `data:image/...;base64,...` payload.
+    Tool:
+      type: object
+      required:
+      - type
+      - function
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            parameters:
+              type: object
+    ToolCall:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          type: object
+          properties:
+            name:
+              type: string
+            arguments:
+              type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

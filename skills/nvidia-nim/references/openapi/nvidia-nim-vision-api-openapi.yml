@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR Vision API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: Vision
+  description: Multimodal vision-language operations
+paths:
+  /v1/chat/completions:
+    post:
+      summary: Create A Multimodal Chat Completion
+      description: 'Generate a chat completion against a vision-language model. Image content is supplied via `image_url` parts inside the user message; the response mirrors the standard chat completions schema.
+
+        '
+      operationId: createVisionChatCompletion
+      tags:
+      - Vision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisionChatRequest'
+      responses:
+        '200':
+          description: Multimodal chat completion response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisionChatResponse'
+        '400':
+          description: Invalid request (e.g. image too large or unsupported format).
+        '401':
+          description: Missing or invalid API key.
+        '413':
+          description: Payload too large.
+components:
+  schemas:
+    VisionChatResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+          example: chat.completion
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  role:
+                    type: string
+                  content:
+                    type: string
+              finish_reason:
+                type: string
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+    VisionChatRequest:
+      type: object
+      required:
+      - model
+      - messages
+      properties:
+        model:
+          type: string
+          description: e.g. `meta/llama-3.2-90b-vision-instruct`, `microsoft/phi-3.5-vision-instruct`, `nvidia/neva-22b`.
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum:
+                - system
+                - user
+                - assistant
+              content:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum:
+                      - text
+                      - image_url
+                    text:
+                      type: string
+                    image_url:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: HTTPS URL or `data:image/jpeg;base64,...`.
+        max_tokens:
+          type: integer
+        temperature:
+          type: number
+        stream:
+          type: boolean
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...

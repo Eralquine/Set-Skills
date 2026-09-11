@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: NVIDIA NIM Biology (BioNeMo) ASR API
+  description: 'NVIDIA BioNeMo NIMs for drug discovery and structural biology. Each model is a containerized microservice with its own task-specific payload but a consistent JSON contract. Includes protein structure prediction (AlphaFold2, ESMFold, OpenFold), protein generation (ProtGPT2, RFDiffusion), molecular property prediction (MolMIM), small molecule generation, and molecular docking (DiffDock).
+
+    '
+  version: '2026-05-25'
+  contact:
+    name: NVIDIA Developer Support
+    url: https://forums.developer.nvidia.com/c/ai-data-science/nemo-llm-service/
+  license:
+    name: NVIDIA AI Enterprise License
+    url: https://www.nvidia.com/en-us/data-center/products/ai-enterprise/
+servers:
+- url: https://integrate.api.nvidia.com
+  description: NVIDIA-hosted NIM endpoint
+- url: http://localhost:8000
+  description: Self-hosted NIM container default
+security:
+- BearerAuth: []
+tags:
+- name: ASR
+  description: Automatic speech recognition (speech-to-text)
+paths:
+  /v1/audio/transcriptions:
+    post:
+      summary: Transcribe Audio
+      description: Transcribe a WAV/FLAC/MP3 audio clip into text using a Riva ASR NIM (e.g. Parakeet, Canary).
+      operationId: createTranscription
+      tags:
+      - ASR
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              - model
+              properties:
+                file:
+                  type: string
+                  format: binary
+                model:
+                  type: string
+                  example: nvidia/parakeet-ctc-1.1b-asr
+                language:
+                  type: string
+                  default: en-US
+                response_format:
+                  type: string
+                  enum:
+                  - json
+                  - text
+                  - srt
+                  - vtt
+                  default: json
+                temperature:
+                  type: number
+      responses:
+        '200':
+          description: Transcription result.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  language:
+                    type: string
+                  duration:
+                    type: number
+        '400':
+          description: Invalid audio or model.
+        '401':
+          description: Missing or invalid API key.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: nvapi-...
