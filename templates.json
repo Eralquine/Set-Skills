@@ -1,0 +1,7 @@
+{
+  "openmontage": {
+    "repo": "https://github.com/calesthio/OpenMontage",
+    "description": "Sistema de producción de video agéntico: describe el video en lenguaje natural y el agente investiga, escribe el guion, genera assets, edita y renderiza. 50+ skills propias (video gen, TTS, música, Remotion/HyperFrames, ffmpeg).",
+    "setupCommand": "make setup   # o el equivalente manual del README si no tienes 'make'"
+  }
+}

@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 SKILLS_SRC="$SCRIPT_DIR/skills"
 MCP_MANIFEST="$SCRIPT_DIR/mcp-servers.json"
 PLUGINS_MANIFEST="$SCRIPT_DIR/plugins.json"
+TEMPLATES_MANIFEST="$SCRIPT_DIR/templates.json"
 
 SKILLS_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MCP_CONFIG="${CLAUDE_MCP_CONFIG:-$HOME/.claude/.mcp.json}"
@@ -13,12 +14,16 @@ PLUGINS_DIR="${CLAUDE_PLUGINS_DIR:-$HOME/.claude-plugins}"
 usage() {
   cat <<'EOF'
 Uso: install.sh [--project <ruta>] [nombre1 nombre2 ...]
+     install.sh new <template> <destino>
 
 Sin argumentos: instala todas las skills sueltas en ~/.claude/skills y
 clona/actualiza todos los plugins completos en ~/.claude-plugins.
 
   --project <ruta>   Instala las skills en <ruta>/.claude/skills en vez de ~/.claude/skills
   nombre1 nombre2 ...   Instala/clona solo esas skills o plugins (por nombre)
+  new <template> <destino>   Clona un project template (templates.json) fresco en <destino>
+                              (no toca ~/.claude/skills ni ~/.claude-plugins — son proyectos
+                              completos que se clonan una vez por cada nuevo proyecto)
 
 Variables de entorno:
   CLAUDE_SKILLS_DIR   Sobrescribe el destino de las skills sueltas
@@ -26,6 +31,35 @@ Variables de entorno:
   CLAUDE_PLUGINS_DIR  Sobrescribe el destino de los plugins completos
 EOF
 }
+
+if [[ "${1:-}" == "new" ]]; then
+  template="${2:?Uso: install.sh new <template> <destino>}"
+  dest="${3:?Uso: install.sh new <template> <destino>}"
+  if [[ ! -f "$TEMPLATES_MANIFEST" ]] || ! command -v node >/dev/null 2>&1; then
+    echo "No encuentro $TEMPLATES_MANIFEST o falta node." >&2
+    exit 1
+  fi
+  repo=$(node -e '
+    const m = require(process.argv[1]);
+    if (!m[process.argv[2]]) process.exit(1);
+    console.log(m[process.argv[2]].repo);
+  ' "$TEMPLATES_MANIFEST" "$template") || { echo "Template '$template' no existe en templates.json." >&2; exit 1; }
+  setupCmd=$(node -e '
+    const m = require(process.argv[1]);
+    console.log(m[process.argv[2]].setupCommand || "");
+  ' "$TEMPLATES_MANIFEST" "$template")
+  if [[ -e "$dest" ]]; then
+    echo "El destino '$dest' ya existe — elige otra carpeta para no pisar nada." >&2
+    exit 1
+  fi
+  echo "↓ Clonando template '$template' en $dest"
+  git clone "$repo" "$dest"
+  echo ""
+  echo "Listo. Siguiente paso:"
+  echo "  cd \"$dest\""
+  [[ -n "$setupCmd" ]] && echo "  $setupCmd"
+  exit 0
+fi
 
 SELECTED=()
 while [[ $# -gt 0 ]]; do

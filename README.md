@@ -10,7 +10,11 @@ corras. Además soporta **plugins completos** de Claude Code (con agents,
 commands y hooks propios) listados en `plugins.json`: para esos, `install.sh`
 clona/actualiza el repo del plugin en `~/.claude-plugins/<nombre>` en vez de
 copiar archivos sueltos, porque un plugin completo necesita que Claude Code lo
-cargue como unidad.
+cargue como unidad. También soporta **project templates** listados en
+`templates.json`: repos que no se instalan sino que se clonan frescos cada
+vez que arrancas un proyecto nuevo de ese tipo (`install.sh new <template>
+<destino>`), porque son el proyecto en sí (con su propio venv, node_modules,
+config), no algo que se agregue a un proyecto existente.
 
 ## Instalar todas las skills (uso normal en el ROG)
 
@@ -99,7 +103,18 @@ semántica de verdad.
 siguientes corridas, así que `git pull && bash install.sh` en el ROG también
 actualiza los plugins.
 
-## Agregar una nueva skill o plugin a esta colección
+## Project templates incluidos
+
+| Template | Qué es | Cómo se usa |
+|---|---|---|
+| [`openmontage`](https://github.com/calesthio/OpenMontage) | Sistema de producción de video agéntico: describís el video en lenguaje natural y el agente investiga, escribe el guion, genera imágenes/video/música/narración, edita y renderiza (Remotion). 50+ skills propias (video gen con Veo/Kling/Seedance, TTS, música, ffmpeg, Three.js, etc.) | `bash install.sh new openmontage ~/proyectos/mi-video`, luego `cd` ahí y `make setup` (necesita Python 3.10+, FFmpeg, Node 18+) |
+
+A diferencia de skills/plugins, esto **no se instala globalmente** — cada
+`install.sh new` te da una copia fresca del template lista para un proyecto
+nuevo. API keys de proveedores (FAL, ElevenLabs, etc.) se configuran en el
+`.env` de esa copia, no en esta colección.
+
+## Agregar una nueva skill, plugin, o template a esta colección
 
 **Skill suelta** (solo un `SKILL.md` autocontenido):
 
@@ -112,5 +127,10 @@ actualiza los plugins.
 
 1. Agrégalo a `plugins.json`: `{"repo": "...", "description": "...", "entryCommand": "/algo"}`.
 2. Documéntalo en la tabla de plugins.
+
+**Project template** (un repo que se clona fresco por proyecto, no se instala):
+
+1. Agrégalo a `templates.json`: `{"repo": "...", "description": "...", "setupCommand": "..."}`.
+2. Documéntalo en la tabla de templates.
 
 Luego commit y push — el siguiente `git pull && install.sh` en el ROG lo recoge.
