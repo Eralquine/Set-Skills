@@ -107,6 +107,7 @@ semántica de verdad.
 |---|---|---|
 | [`pagokit`](https://github.com/hainrixz/agente-pagokit) | Agente que elige el proveedor de pagos correcto para tu proyecto y genera la integración completa (checkout, webhook autenticado, migración de DB, portal de cliente, reembolsos) con hooks que **bloquean** escrituras inseguras (secrets en texto plano, montos mal calculados, webhooks sin verificar) | `install.sh` lo clona en `~/.claude-plugins/pagokit`; para usarlo corre `claude --plugin-dir ~/.claude-plugins/pagokit` y luego `/pagokit:start` |
 | [`firecrawl`](https://github.com/firecrawl/skills) | Catálogo oficial de Firecrawl (scraping/crawling/búsqueda web a markdown listo para LLM): ~17 skills — primitivas (`scrape`/`search`/`crawl`/`map`/`interact`/`agent`/`monitor`/`parse`/`download`) y guías de integración de API — más su MCP server propio | `install.sh` lo clona en `~/.claude-plugins/firecrawl`; corre `claude --plugin-dir ~/.claude-plugins/firecrawl`. Necesita `FIRECRAWL_API_KEY` (`fc-...` en [firecrawl.dev](https://firecrawl.dev)) para todo excepto scrape/search/parse básicos |
+| [`cybersecurity-skills`](https://github.com/mukul975/anthropic-cybersecurity-skills) | 818 skills de seguridad en 34 dominios (DFIR, threat intel, cloud/container/OT security, red teaming, AI security), mapeadas a MITRE ATT&CK/ATLAS/D3FEND y NIST CSF/AI RMF. **No afiliado a Anthropic** pese al nombre — proyecto comunitario independiente, el propio README lo aclara | `install.sh` lo clona en `~/.claude-plugins/cybersecurity-skills`; corre `claude --plugin-dir ~/.claude-plugins/cybersecurity-skills`. Sin API key para la mayoría; algunas skills de amenaza/OSINT usan claves de terceros (VirusTotal, Shodan, etc.) que documentan en su propio SKILL.md |
 
 `install.sh` clona cada plugin la primera vez y hace `git pull` en las
 siguientes corridas, así que `git pull && bash install.sh` en el ROG también
@@ -151,15 +152,12 @@ están arriba:
   principal) — es el producto/API en sí, no algo que se copie a
   `~/.claude/skills`. Lo que sí vale la pena está en `firecrawl/skills`
   (arriba, como plugin).
-- **[mukul975/anthropic-cybersecurity-skills](https://github.com/mukul975/anthropic-cybersecurity-skills)**
-  — 818 skills de seguridad (no afiliado a Anthropic pese al nombre; el
-  README lo aclara). Bien gobernado y con framing de autorización consistente
-  en las skills dual-use (pentesting/red-team), pero 818 es demasiado para
-  importar en bloque a una colección personal, y las skills ofensivas no
-  deberían quedar siempre cargadas sin saber si de verdad haces engagements
-  autorizados. Pendiente: decir qué dominios te interesan (DFIR/blue-team
-  específicamente, o también red-team porque hacés pentesting autorizado) y
-  las agrego seleccionadas en vez de todo el catálogo.
+`mukul975/anthropic-cybersecurity-skills` (818 skills) sí se agregó — ver la
+tabla de plugins arriba. Confirmaste que quieres el catálogo completo,
+incluyendo las skills dual-use de red-team/pentesting; cada una de esas trae
+su propio aviso de "solo con autorización por escrito" en el `SKILL.md`, pero
+eso no impone nada en tiempo de ejecución — la responsabilidad de solo
+usarlas en engagements autorizados es tuya al invocarlas.
 
 ## Agregar una nueva skill, plugin, template o self-installer a esta colección
 

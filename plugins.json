@@ -8,5 +8,10 @@
     "repo": "https://github.com/firecrawl/skills",
     "description": "Catálogo oficial de Firecrawl: scraping/crawling/búsqueda web a markdown listo para LLM. ~17 skills (core: scrape/search/crawl/map/interact/agent/monitor/parse/download; build: integrar la API a tu código) más MCP server propio incluido.",
     "entryCommand": ""
+  },
+  "cybersecurity-skills": {
+    "repo": "https://github.com/mukul975/anthropic-cybersecurity-skills",
+    "description": "818 skills de seguridad (34 dominios: DFIR, threat intel, cloud/container/OT security, red teaming, AI security) mapeadas a MITRE ATT&CK/ATLAS/D3FEND y NIST CSF/AI RMF. No afiliado a Anthropic pese al nombre — proyecto comunitario independiente, bien gobernado (SCOPE.md, CI de validación, proceso de disclosure). Las skills dual-use (C2, phishing simulation, LLM red-teaming) llevan aviso explícito de 'solo con autorización por escrito' en su propio contenido.",
+    "entryCommand": ""
   }
 }
