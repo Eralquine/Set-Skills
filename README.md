@@ -3,6 +3,12 @@
 Colección personal de skills de Claude Code, juntadas aquí para poder instalarlas
 de golpe en cualquier máquina (incluyendo el ROG) con un solo comando.
 
+**[Ver la colección completa como grafo](collection-graph/graph.html)** — 38
+entradas (31 skills + 3 plugins + 3 templates + 1 self-installer) por
+categoría, requisito (¿necesita API key? ¿MCP? ¿nada?) y repo de origen.
+Regenéralo con `python3 scripts/build_collection_graph.py` después de
+agregar/quitar algo.
+
 Este repo **no se usa como skill directamente** — es el punto de reunión. Cada
 skill suelta vive en `skills/<nombre>/` con su propio `SKILL.md`, y `install.sh`
 las copia a `~/.claude/skills` (o a un proyecto puntual) en la máquina donde lo

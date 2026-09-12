@@ -1,0 +1,1313 @@
+{
+ "meta": {
+  "source": "Set-Skills collection, hand-classified",
+  "node_count": 88,
+  "edge_count": 131
+ },
+ "nodes": [
+  {
+   "id": "cat:design",
+   "label": "design",
+   "type": "category"
+  },
+  {
+   "id": "entry:plasmic-designer",
+   "label": "plasmic-designer",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:plasmicapp",
+   "label": "plasmicapp",
+   "type": "source"
+  },
+  {
+   "id": "need:mcp-server",
+   "label": "MCP server",
+   "type": "requirement"
+  },
+  {
+   "id": "cat:seo",
+   "label": "seo",
+   "type": "category"
+  },
+  {
+   "id": "entry:competitive-landscape",
+   "label": "competitive-landscape",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:every-app",
+   "label": "every-app",
+   "type": "source"
+  },
+  {
+   "id": "need:cloud-account",
+   "label": "Cloud account (OAuth/login)",
+   "type": "requirement"
+  },
+  {
+   "id": "entry:competitor-analysis",
+   "label": "competitor-analysis",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:keyword-clustering",
+   "label": "keyword-clustering",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:keyword-research",
+   "label": "keyword-research",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:link-prospecting",
+   "label": "link-prospecting",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:local-seo",
+   "label": "local-seo",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:seo-audit",
+   "label": "seo-audit",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:seo-coach",
+   "label": "seo-coach",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:seo-project-setup",
+   "label": "seo-project-setup",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "cat:api-discovery",
+   "label": "api-discovery",
+   "type": "category"
+  },
+  {
+   "id": "entry:api-finder",
+   "label": "api-finder",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:public-apis",
+   "label": "public-apis",
+   "type": "source"
+  },
+  {
+   "id": "need:no-requirement",
+   "label": "No requirement (local/free)",
+   "type": "requirement"
+  },
+  {
+   "id": "cat:knowledge-graph",
+   "label": "knowledge-graph",
+   "type": "category"
+  },
+  {
+   "id": "entry:graphify",
+   "label": "graphify",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:Graphify-Labs",
+   "label": "Graphify-Labs",
+   "type": "source"
+  },
+  {
+   "id": "need:cli-install",
+   "label": "Self-installing CLI",
+   "type": "requirement"
+  },
+  {
+   "id": "cat:llm-api",
+   "label": "llm-api",
+   "type": "category"
+  },
+  {
+   "id": "entry:nvidia-nim",
+   "label": "nvidia-nim",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:NVIDIA",
+   "label": "NVIDIA",
+   "type": "source"
+  },
+  {
+   "id": "need:api-key-free",
+   "label": "API key (free tier)",
+   "type": "requirement"
+  },
+  {
+   "id": "cat:voice-tts",
+   "label": "voice-tts",
+   "type": "category"
+  },
+  {
+   "id": "entry:omnivoice",
+   "label": "omnivoice",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:k2-fsa",
+   "label": "k2-fsa",
+   "type": "source"
+  },
+  {
+   "id": "need:gpu-required",
+   "label": "GPU required",
+   "type": "requirement"
+  },
+  {
+   "id": "entry:penpot",
+   "label": "penpot",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:penpot",
+   "label": "penpot",
+   "type": "source"
+  },
+  {
+   "id": "cat:database",
+   "label": "database",
+   "type": "category"
+  },
+  {
+   "id": "entry:turso",
+   "label": "turso",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:tursodatabase",
+   "label": "tursodatabase",
+   "type": "source"
+  },
+  {
+   "id": "cat:code-search-memory",
+   "label": "code-search-memory",
+   "type": "category"
+  },
+  {
+   "id": "entry:codebase-memory-mcp",
+   "label": "codebase-memory-mcp",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:DeusData",
+   "label": "DeusData",
+   "type": "source"
+  },
+  {
+   "id": "cat:scraping-research",
+   "label": "scraping-research",
+   "type": "category"
+  },
+  {
+   "id": "entry:scrapling-official",
+   "label": "scrapling-official",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:D4Vinci",
+   "label": "D4Vinci",
+   "type": "source"
+  },
+  {
+   "id": "entry:agent-reach",
+   "label": "agent-reach",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:Panniantong",
+   "label": "Panniantong",
+   "type": "source"
+  },
+  {
+   "id": "need:user-cookies",
+   "label": "User's own login cookies",
+   "type": "requirement"
+  },
+  {
+   "id": "entry:scrapegraph-mcp",
+   "label": "scrapegraph-mcp",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:ScrapeGraphAI",
+   "label": "ScrapeGraphAI",
+   "type": "source"
+  },
+  {
+   "id": "need:api-key-paid",
+   "label": "API key (paid)",
+   "type": "requirement"
+  },
+  {
+   "id": "cat:skill-discovery",
+   "label": "skill-discovery",
+   "type": "category"
+  },
+  {
+   "id": "entry:best-skills-finder",
+   "label": "best-skills-finder",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:LinklyAI",
+   "label": "LinklyAI",
+   "type": "source"
+  },
+  {
+   "id": "entry:find-skills",
+   "label": "find-skills",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:vercel-labs",
+   "label": "vercel-labs",
+   "type": "source"
+  },
+  {
+   "id": "cat:browser-automation",
+   "label": "browser-automation",
+   "type": "category"
+  },
+  {
+   "id": "entry:agent-browser",
+   "label": "agent-browser",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:frontend-design",
+   "label": "frontend-design",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:anthropics",
+   "label": "anthropics",
+   "type": "source"
+  },
+  {
+   "id": "entry:web-design-guidelines",
+   "label": "web-design-guidelines",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "cat:dev-productivity",
+   "label": "dev-productivity",
+   "type": "category"
+  },
+  {
+   "id": "entry:grill-me",
+   "label": "grill-me",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:mattpocock",
+   "label": "mattpocock",
+   "type": "source"
+  },
+  {
+   "id": "entry:grill-with-docs",
+   "label": "grill-with-docs",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "cat:cloud-azure",
+   "label": "cloud-azure",
+   "type": "category"
+  },
+  {
+   "id": "entry:azure-ai",
+   "label": "azure-ai",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "source:microsoft",
+   "label": "microsoft",
+   "type": "source"
+  },
+  {
+   "id": "entry:azure-compliance",
+   "label": "azure-compliance",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "entry:azure-storage",
+   "label": "azure-storage",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "cat:react-frontend",
+   "label": "react-frontend",
+   "type": "category"
+  },
+  {
+   "id": "entry:vercel-react-best-practices",
+   "label": "vercel-react-best-practices",
+   "type": "entry",
+   "kind": "skill",
+   "kindLabel": "skills/"
+  },
+  {
+   "id": "cat:payments",
+   "label": "payments",
+   "type": "category"
+  },
+  {
+   "id": "entry:pagokit",
+   "label": "pagokit",
+   "type": "entry",
+   "kind": "plugin",
+   "kindLabel": "plugins.json"
+  },
+  {
+   "id": "source:hainrixz",
+   "label": "hainrixz",
+   "type": "source"
+  },
+  {
+   "id": "entry:firecrawl",
+   "label": "firecrawl",
+   "type": "entry",
+   "kind": "plugin",
+   "kindLabel": "plugins.json"
+  },
+  {
+   "id": "source:firecrawl",
+   "label": "firecrawl",
+   "type": "source"
+  },
+  {
+   "id": "cat:security",
+   "label": "security",
+   "type": "category"
+  },
+  {
+   "id": "entry:cybersecurity-skills",
+   "label": "cybersecurity-skills",
+   "type": "entry",
+   "kind": "plugin",
+   "kindLabel": "plugins.json"
+  },
+  {
+   "id": "source:mukul975",
+   "label": "mukul975",
+   "type": "source"
+  },
+  {
+   "id": "cat:video-production",
+   "label": "video-production",
+   "type": "category"
+  },
+  {
+   "id": "entry:openmontage",
+   "label": "openmontage",
+   "type": "entry",
+   "kind": "template",
+   "kindLabel": "templates.json"
+  },
+  {
+   "id": "source:calesthio",
+   "label": "calesthio",
+   "type": "source"
+  },
+  {
+   "id": "cat:finance",
+   "label": "finance",
+   "type": "category"
+  },
+  {
+   "id": "entry:daily-stock-analysis",
+   "label": "daily-stock-analysis",
+   "type": "entry",
+   "kind": "template",
+   "kindLabel": "templates.json"
+  },
+  {
+   "id": "source:ZhuLinsen",
+   "label": "ZhuLinsen",
+   "type": "source"
+  },
+  {
+   "id": "entry:omniroute",
+   "label": "omniroute",
+   "type": "entry",
+   "kind": "template",
+   "kindLabel": "templates.json"
+  },
+  {
+   "id": "source:diegosouzapw",
+   "label": "diegosouzapw",
+   "type": "source"
+  },
+  {
+   "id": "entry:gstack",
+   "label": "gstack",
+   "type": "entry",
+   "kind": "self-installer",
+   "kindLabel": "self-installers.json"
+  },
+  {
+   "id": "source:garrytan",
+   "label": "garrytan",
+   "type": "source"
+  }
+ ],
+ "edges": [
+  {
+   "source": "cat:design",
+   "target": "entry:plasmic-designer",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:plasmic-designer",
+   "target": "source:plasmicapp",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:plasmic-designer",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:competitive-landscape",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitive-landscape",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitive-landscape",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitive-landscape",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:competitor-analysis",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitor-analysis",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitor-analysis",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:competitor-analysis",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:keyword-clustering",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-clustering",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-clustering",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-clustering",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:keyword-research",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-research",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-research",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:keyword-research",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:link-prospecting",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:link-prospecting",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:link-prospecting",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:link-prospecting",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:local-seo",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:local-seo",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:local-seo",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:local-seo",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:seo-audit",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-audit",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-audit",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-audit",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:seo-coach",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-coach",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-coach",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-coach",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:seo",
+   "target": "entry:seo-project-setup",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-project-setup",
+   "target": "source:every-app",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-project-setup",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:seo-project-setup",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:api-discovery",
+   "target": "entry:api-finder",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:api-finder",
+   "target": "source:public-apis",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:api-finder",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:knowledge-graph",
+   "target": "entry:graphify",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:graphify",
+   "target": "source:Graphify-Labs",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:graphify",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:llm-api",
+   "target": "entry:nvidia-nim",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:nvidia-nim",
+   "target": "source:NVIDIA",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:nvidia-nim",
+   "target": "need:api-key-free",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:voice-tts",
+   "target": "entry:omnivoice",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:omnivoice",
+   "target": "source:k2-fsa",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:omnivoice",
+   "target": "need:gpu-required",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:design",
+   "target": "entry:penpot",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:penpot",
+   "target": "source:penpot",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:penpot",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:penpot",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:database",
+   "target": "entry:turso",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:turso",
+   "target": "source:tursodatabase",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:turso",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:code-search-memory",
+   "target": "entry:codebase-memory-mcp",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:codebase-memory-mcp",
+   "target": "source:DeusData",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:codebase-memory-mcp",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:codebase-memory-mcp",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:scraping-research",
+   "target": "entry:scrapling-official",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:scrapling-official",
+   "target": "source:D4Vinci",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:scrapling-official",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:scraping-research",
+   "target": "entry:agent-reach",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:agent-reach",
+   "target": "source:Panniantong",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:agent-reach",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:agent-reach",
+   "target": "need:user-cookies",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:scraping-research",
+   "target": "entry:scrapegraph-mcp",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:scrapegraph-mcp",
+   "target": "source:ScrapeGraphAI",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:scrapegraph-mcp",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:scrapegraph-mcp",
+   "target": "need:api-key-paid",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:skill-discovery",
+   "target": "entry:best-skills-finder",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:best-skills-finder",
+   "target": "source:LinklyAI",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:best-skills-finder",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:skill-discovery",
+   "target": "entry:find-skills",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:find-skills",
+   "target": "source:vercel-labs",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:find-skills",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:browser-automation",
+   "target": "entry:agent-browser",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:agent-browser",
+   "target": "source:vercel-labs",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:agent-browser",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:design",
+   "target": "entry:frontend-design",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:frontend-design",
+   "target": "source:anthropics",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:frontend-design",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:design",
+   "target": "entry:web-design-guidelines",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:web-design-guidelines",
+   "target": "source:vercel-labs",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:web-design-guidelines",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:dev-productivity",
+   "target": "entry:grill-me",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:grill-me",
+   "target": "source:mattpocock",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:grill-me",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:dev-productivity",
+   "target": "entry:grill-with-docs",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:grill-with-docs",
+   "target": "source:mattpocock",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:grill-with-docs",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:cloud-azure",
+   "target": "entry:azure-ai",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-ai",
+   "target": "source:microsoft",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-ai",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-ai",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:cloud-azure",
+   "target": "entry:azure-compliance",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-compliance",
+   "target": "source:microsoft",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-compliance",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-compliance",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:cloud-azure",
+   "target": "entry:azure-storage",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-storage",
+   "target": "source:microsoft",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-storage",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:azure-storage",
+   "target": "need:cloud-account",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:react-frontend",
+   "target": "entry:vercel-react-best-practices",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:vercel-react-best-practices",
+   "target": "source:vercel-labs",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:vercel-react-best-practices",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:payments",
+   "target": "entry:pagokit",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:pagokit",
+   "target": "source:hainrixz",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:pagokit",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:scraping-research",
+   "target": "entry:firecrawl",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:firecrawl",
+   "target": "source:firecrawl",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:firecrawl",
+   "target": "need:mcp-server",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:firecrawl",
+   "target": "need:api-key-free",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:security",
+   "target": "entry:cybersecurity-skills",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:cybersecurity-skills",
+   "target": "source:mukul975",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:cybersecurity-skills",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:video-production",
+   "target": "entry:openmontage",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:openmontage",
+   "target": "source:calesthio",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:openmontage",
+   "target": "need:api-key-paid",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:finance",
+   "target": "entry:daily-stock-analysis",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:daily-stock-analysis",
+   "target": "source:ZhuLinsen",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:daily-stock-analysis",
+   "target": "need:api-key-free",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:llm-api",
+   "target": "entry:omniroute",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:omniroute",
+   "target": "source:diegosouzapw",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:omniroute",
+   "target": "need:no-requirement",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:dev-productivity",
+   "target": "entry:gstack",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:gstack",
+   "target": "source:garrytan",
+   "relation": "from",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "entry:gstack",
+   "target": "need:cli-install",
+   "relation": "needs",
+   "confidence": "EXTRACTED"
+  }
+ ]
+}
