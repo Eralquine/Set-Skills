@@ -36,6 +36,11 @@ guessed).
    example model IDs seen in the specs, but before depending on one, confirm
    it's still live with `GET /v1/models` (or the model's page on
    build.nvidia.com) rather than assuming the example is current.
+   `references/graph/` has a browsable category → model → provider graph
+   built from `scripts/build_model_graph.py` — regenerate it with
+   `NVIDIA_API_KEY=... python3 scripts/build_model_graph.py` for the full,
+   current catalog (it falls back to a ~32-model hand-verified seed list
+   without a key — see the graph's own report for which mode produced it).
 5. For chat/completions/embeddings, the transport is OpenAI-compatible
    enough that the official `openai` SDK works unmodified — just change
    `base_url` to `https://integrate.api.nvidia.com/v1` and `api_key` to the

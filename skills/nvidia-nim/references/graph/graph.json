@@ -1,0 +1,682 @@
+{
+ "meta": {
+  "source": "NVIDIA NIM catalog (seed list (no API key), 32 models)",
+  "node_count": 51,
+  "edge_count": 64
+ },
+ "nodes": [
+  {
+   "id": "cat:chat",
+   "label": "chat",
+   "type": "category"
+  },
+  {
+   "id": "provider:meta",
+   "label": "meta",
+   "type": "provider"
+  },
+  {
+   "id": "model:meta/llama-3.1-8b-instruct",
+   "label": "meta/llama-3.1-8b-instruct",
+   "type": "model",
+   "use_case": "Fast general-purpose chat"
+  },
+  {
+   "id": "model:meta/llama-3.1-70b-instruct",
+   "label": "meta/llama-3.1-70b-instruct",
+   "type": "model",
+   "use_case": "Complex reasoning, high quality"
+  },
+  {
+   "id": "model:meta/llama-3.2-1b-instruct",
+   "label": "meta/llama-3.2-1b-instruct",
+   "type": "model",
+   "use_case": "Edge devices, ultra-low latency"
+  },
+  {
+   "id": "model:meta/llama-3.2-3b-instruct",
+   "label": "meta/llama-3.2-3b-instruct",
+   "type": "model",
+   "use_case": "Mobile, low-resource"
+  },
+  {
+   "id": "model:meta/llama-3.3-70b-instruct",
+   "label": "meta/llama-3.3-70b-instruct",
+   "type": "model",
+   "use_case": "Latest Llama, optimized"
+  },
+  {
+   "id": "provider:mistralai",
+   "label": "mistralai",
+   "type": "provider"
+  },
+  {
+   "id": "model:mistralai/mistral-7b-instruct-v0.3",
+   "label": "mistralai/mistral-7b-instruct-v0.3",
+   "type": "model",
+   "use_case": "Efficient general purpose"
+  },
+  {
+   "id": "model:mistralai/mixtral-8x7b-instruct",
+   "label": "mistralai/mixtral-8x7b-instruct",
+   "type": "model",
+   "use_case": "Balanced MoE performance"
+  },
+  {
+   "id": "model:mistralai/mixtral-8x22b-instruct-v0.1",
+   "label": "mistralai/mixtral-8x22b-instruct-v0.1",
+   "type": "model",
+   "use_case": "High-end MoE reasoning"
+  },
+  {
+   "id": "provider:microsoft",
+   "label": "microsoft",
+   "type": "provider"
+  },
+  {
+   "id": "model:microsoft/phi-4-mini-instruct",
+   "label": "microsoft/phi-4-mini-instruct",
+   "type": "model",
+   "use_case": "Compact, efficient"
+  },
+  {
+   "id": "model:microsoft/phi-4-mini-flash-reasoning",
+   "label": "microsoft/phi-4-mini-flash-reasoning",
+   "type": "model",
+   "use_case": "Fast reasoning tasks"
+  },
+  {
+   "id": "provider:google",
+   "label": "google",
+   "type": "provider"
+  },
+  {
+   "id": "model:google/gemma-7b",
+   "label": "google/gemma-7b",
+   "type": "model",
+   "use_case": "Base model for fine-tuning"
+  },
+  {
+   "id": "model:google/gemma-2-2b-it",
+   "label": "google/gemma-2-2b-it",
+   "type": "model",
+   "use_case": "Lightweight chat"
+  },
+  {
+   "id": "model:google/codegemma-7b",
+   "label": "google/codegemma-7b",
+   "type": "model",
+   "use_case": "Code generation"
+  },
+  {
+   "id": "provider:nvidia",
+   "label": "nvidia",
+   "type": "provider"
+  },
+  {
+   "id": "model:nvidia/nemotron-mini-4b-instruct",
+   "label": "nvidia/nemotron-mini-4b-instruct",
+   "type": "model",
+   "use_case": "Compact instruction following"
+  },
+  {
+   "id": "model:nvidia/llama-3.1-nemotron-nano-8b-v1",
+   "label": "nvidia/llama-3.1-nemotron-nano-8b-v1",
+   "type": "model",
+   "use_case": "Optimized Llama variant"
+  },
+  {
+   "id": "provider:deepseek-ai",
+   "label": "deepseek-ai",
+   "type": "provider"
+  },
+  {
+   "id": "model:deepseek-ai/deepseek-v4-flash",
+   "label": "deepseek-ai/deepseek-v4-flash",
+   "type": "model",
+   "use_case": "Fast inference"
+  },
+  {
+   "id": "model:deepseek-ai/deepseek-v4-pro",
+   "label": "deepseek-ai/deepseek-v4-pro",
+   "type": "model",
+   "use_case": "High quality"
+  },
+  {
+   "id": "provider:qwen",
+   "label": "qwen",
+   "type": "provider"
+  },
+  {
+   "id": "model:qwen/qwen2.5-coder-7b-instruct",
+   "label": "qwen/qwen2.5-coder-7b-instruct",
+   "type": "model",
+   "use_case": "Code generation"
+  },
+  {
+   "id": "model:qwen/qwen3-coder-480b-a35b-instruct",
+   "label": "qwen/qwen3-coder-480b-a35b-instruct",
+   "type": "model",
+   "use_case": "Advanced coding"
+  },
+  {
+   "id": "provider:bytedance",
+   "label": "bytedance",
+   "type": "provider"
+  },
+  {
+   "id": "model:bytedance/seed-oss-36b-instruct",
+   "label": "bytedance/seed-oss-36b-instruct",
+   "type": "model",
+   "use_case": "Open source large model"
+  },
+  {
+   "id": "provider:abacusai",
+   "label": "abacusai",
+   "type": "provider"
+  },
+  {
+   "id": "model:abacusai/dracarys-llama-3.1-70b-instruct",
+   "label": "abacusai/dracarys-llama-3.1-70b-instruct",
+   "type": "model",
+   "use_case": "Enhanced Llama variant"
+  },
+  {
+   "id": "provider:ibm",
+   "label": "ibm",
+   "type": "provider"
+  },
+  {
+   "id": "model:ibm/granite-3.0-8b-instruct",
+   "label": "ibm/granite-3.0-8b-instruct",
+   "type": "model",
+   "use_case": "Enterprise general purpose"
+  },
+  {
+   "id": "cat:embeddings",
+   "label": "embeddings",
+   "type": "category"
+  },
+  {
+   "id": "model:nvidia/llama-3.2-nv-embedqa-1b-v2",
+   "label": "nvidia/llama-3.2-nv-embedqa-1b-v2",
+   "type": "model",
+   "use_case": "Asymmetric retrieval (query/passage)"
+  },
+  {
+   "id": "model:nvidia/nv-embedqa-e5-v5",
+   "label": "nvidia/nv-embedqa-e5-v5",
+   "type": "model",
+   "use_case": "Asymmetric retrieval (query/passage)"
+  },
+  {
+   "id": "provider:baai",
+   "label": "baai",
+   "type": "provider"
+  },
+  {
+   "id": "model:baai/bge-m3",
+   "label": "baai/bge-m3",
+   "type": "model",
+   "use_case": "Multilingual embeddings"
+  },
+  {
+   "id": "cat:reranking",
+   "label": "reranking",
+   "type": "category"
+  },
+  {
+   "id": "model:nvidia/llama-3.2-nv-rerankqa-1b-v2",
+   "label": "nvidia/llama-3.2-nv-rerankqa-1b-v2",
+   "type": "model",
+   "use_case": "RAG result reranking"
+  },
+  {
+   "id": "model:nvidia/nv-rerankqa-mistral-4b-v3",
+   "label": "nvidia/nv-rerankqa-mistral-4b-v3",
+   "type": "model",
+   "use_case": "RAG result reranking"
+  },
+  {
+   "id": "cat:tts",
+   "label": "tts",
+   "type": "category"
+  },
+  {
+   "id": "model:nvidia/magpie-tts",
+   "label": "nvidia/magpie-tts",
+   "type": "model",
+   "use_case": "Speech synthesis (Riva)"
+  },
+  {
+   "id": "cat:asr",
+   "label": "asr",
+   "type": "category"
+  },
+  {
+   "id": "model:nvidia/parakeet-ctc-1.1b-asr",
+   "label": "nvidia/parakeet-ctc-1.1b-asr",
+   "type": "model",
+   "use_case": "Speech transcription (Riva)"
+  },
+  {
+   "id": "cat:image-generation",
+   "label": "image-generation",
+   "type": "category"
+  },
+  {
+   "id": "provider:black-forest-labs",
+   "label": "black-forest-labs",
+   "type": "provider"
+  },
+  {
+   "id": "model:black-forest-labs/flux.1-schnell",
+   "label": "black-forest-labs/flux.1-schnell",
+   "type": "model",
+   "use_case": "Fast image generation"
+  },
+  {
+   "id": "provider:stabilityai",
+   "label": "stabilityai",
+   "type": "provider"
+  },
+  {
+   "id": "model:stabilityai/sdxl-turbo",
+   "label": "stabilityai/sdxl-turbo",
+   "type": "model",
+   "use_case": "Fast image generation"
+  },
+  {
+   "id": "model:nvidia/edify-image",
+   "label": "nvidia/edify-image",
+   "type": "model",
+   "use_case": "High-fidelity image generation"
+  }
+ ],
+ "edges": [
+  {
+   "source": "cat:chat",
+   "target": "model:meta/llama-3.1-8b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:meta/llama-3.1-8b-instruct",
+   "target": "provider:meta",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:meta/llama-3.1-70b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:meta/llama-3.1-70b-instruct",
+   "target": "provider:meta",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:meta/llama-3.2-1b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:meta/llama-3.2-1b-instruct",
+   "target": "provider:meta",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:meta/llama-3.2-3b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:meta/llama-3.2-3b-instruct",
+   "target": "provider:meta",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:meta/llama-3.3-70b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:meta/llama-3.3-70b-instruct",
+   "target": "provider:meta",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:mistralai/mistral-7b-instruct-v0.3",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:mistralai/mistral-7b-instruct-v0.3",
+   "target": "provider:mistralai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:mistralai/mixtral-8x7b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:mistralai/mixtral-8x7b-instruct",
+   "target": "provider:mistralai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:mistralai/mixtral-8x22b-instruct-v0.1",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:mistralai/mixtral-8x22b-instruct-v0.1",
+   "target": "provider:mistralai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:microsoft/phi-4-mini-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:microsoft/phi-4-mini-instruct",
+   "target": "provider:microsoft",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:microsoft/phi-4-mini-flash-reasoning",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:microsoft/phi-4-mini-flash-reasoning",
+   "target": "provider:microsoft",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:google/gemma-7b",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:google/gemma-7b",
+   "target": "provider:google",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:google/gemma-2-2b-it",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:google/gemma-2-2b-it",
+   "target": "provider:google",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:google/codegemma-7b",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:google/codegemma-7b",
+   "target": "provider:google",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:nvidia/nemotron-mini-4b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/nemotron-mini-4b-instruct",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:nvidia/llama-3.1-nemotron-nano-8b-v1",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/llama-3.1-nemotron-nano-8b-v1",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:deepseek-ai/deepseek-v4-flash",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:deepseek-ai/deepseek-v4-flash",
+   "target": "provider:deepseek-ai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:deepseek-ai/deepseek-v4-pro",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:deepseek-ai/deepseek-v4-pro",
+   "target": "provider:deepseek-ai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:qwen/qwen2.5-coder-7b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:qwen/qwen2.5-coder-7b-instruct",
+   "target": "provider:qwen",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:qwen/qwen3-coder-480b-a35b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:qwen/qwen3-coder-480b-a35b-instruct",
+   "target": "provider:qwen",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:bytedance/seed-oss-36b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:bytedance/seed-oss-36b-instruct",
+   "target": "provider:bytedance",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:abacusai/dracarys-llama-3.1-70b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:abacusai/dracarys-llama-3.1-70b-instruct",
+   "target": "provider:abacusai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:chat",
+   "target": "model:ibm/granite-3.0-8b-instruct",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:ibm/granite-3.0-8b-instruct",
+   "target": "provider:ibm",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:embeddings",
+   "target": "model:nvidia/llama-3.2-nv-embedqa-1b-v2",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/llama-3.2-nv-embedqa-1b-v2",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:embeddings",
+   "target": "model:nvidia/nv-embedqa-e5-v5",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/nv-embedqa-e5-v5",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:embeddings",
+   "target": "model:baai/bge-m3",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:baai/bge-m3",
+   "target": "provider:baai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:reranking",
+   "target": "model:nvidia/llama-3.2-nv-rerankqa-1b-v2",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/llama-3.2-nv-rerankqa-1b-v2",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:reranking",
+   "target": "model:nvidia/nv-rerankqa-mistral-4b-v3",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/nv-rerankqa-mistral-4b-v3",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:tts",
+   "target": "model:nvidia/magpie-tts",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/magpie-tts",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:asr",
+   "target": "model:nvidia/parakeet-ctc-1.1b-asr",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/parakeet-ctc-1.1b-asr",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:image-generation",
+   "target": "model:black-forest-labs/flux.1-schnell",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:black-forest-labs/flux.1-schnell",
+   "target": "provider:black-forest-labs",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:image-generation",
+   "target": "model:stabilityai/sdxl-turbo",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:stabilityai/sdxl-turbo",
+   "target": "provider:stabilityai",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "cat:image-generation",
+   "target": "model:nvidia/edify-image",
+   "relation": "contains",
+   "confidence": "EXTRACTED"
+  },
+  {
+   "source": "model:nvidia/edify-image",
+   "target": "provider:nvidia",
+   "relation": "published_by",
+   "confidence": "EXTRACTED"
+  }
+ ]
+}

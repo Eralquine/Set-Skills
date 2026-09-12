@@ -67,7 +67,7 @@ bash install.sh --project /ruta/a/mi-proyecto
 | [`seo-project-setup`](skills/seo-project-setup/SKILL.md) | Llena el contexto compartido del proyecto (sitio, metas, competidores, páginas clave) y valida el MCP/Search Console | Cuenta de OpenSEO |
 | [`api-finder`](skills/api-finder/SKILL.md) | Sugiere APIs públicas/gratis reales para lo que necesites (clima, animales, finanzas, geocoding, etc.) en vez de inventar endpoints | Ninguno — datos curados de [public-apis/public-apis](https://github.com/public-apis/public-apis) |
 | [`graphify`](skills/graphify/SKILL.md) | Convierte cualquier carpeta (código, docs, PDFs, imágenes, video) en un grafo de conocimiento navegable: `graphify query "..."`, `graphify path A B`, `graphify explain "X"` | Se instala solo la primera vez (`uv tool install graphifyy` o `pip install graphifyy`); el análisis de código es local, pero el análisis semántico de docs/imágenes necesita una API key de LLM (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc.) |
-| [`nvidia-nim`](skills/nvidia-nim/SKILL.md) | Endpoints reales de NVIDIA NIM (build.nvidia.com) listos para usar sin re-descubrirlos cada vez: chat/LLM, embeddings, reranking, visión, generación de imágenes, TTS/ASR, biología (BioNeMo) — con specs OpenAPI completas incluidas | API key `nvapi-...` gratis en [build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys) (1000 créditos gratis, 40 req/min) |
+| [`nvidia-nim`](skills/nvidia-nim/SKILL.md) | Endpoints reales de NVIDIA NIM (build.nvidia.com) listos para usar sin re-descubrirlos cada vez: chat/LLM, embeddings, reranking, visión, generación de imágenes, TTS/ASR, biología (BioNeMo) — con specs OpenAPI completas incluidas y un grafo del catálogo de modelos (`references/graph/`, regenerable con `scripts/build_model_graph.py`) | API key `nvapi-...` gratis en [build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys) (1000 créditos gratis, 40 req/min) |
 | [`omnivoice`](skills/omnivoice/SKILL.md) | TTS zero-shot multilingüe (600+ idiomas): clona una voz desde un audio de referencia de 3-10s, o diséñala por atributos (género, edad, tono, acento, dialecto) | Local — sin API key, pero necesita GPU (o Apple Silicon/Intel Arc) y PyTorch; descarga el modelo de Hugging Face la primera vez |
 | [`penpot`](skills/penpot/SKILL.md) | Lee/edita archivos de diseño de Penpot (alternativa open-source a Figma): componentes, tokens, estilos, capas; exporta assets; diseño-a-código | MCP server oficial `@penpot/mcp` — modo remoto necesita cuenta Penpot + MCP key (Your account → Integrations → MCP Server); modo local no necesita nada |
 | [`turso`](skills/turso/SKILL.md) | Consulta/modifica un archivo `.db` SQLite local en lenguaje natural (listar tablas, queries, inserts, cambios de schema) | Binario `tursodb` (se instala con un curl), sin auth — se registra por proyecto con `claude mcp add ... -- tursodb <db> --mcp` |
@@ -100,6 +100,23 @@ que usa `graphify` (`EXTRACTED` en cada conexión, sin nada inferido). Si en tu
 ROG tienes una API key de LLM configurada, puedes correr el pipeline real de
 `graphify` sobre carpetas de docs/PDFs/imágenes y sí te va a hacer inferencia
 semántica de verdad.
+
+### Demo 2: el catálogo de modelos de `nvidia-nim` como grafo
+
+Mismo patrón, aplicado a `nvidia-nim` en `skills/nvidia-nim/references/graph/`
+— categoría → modelo → proveedor, generado por
+`skills/nvidia-nim/scripts/build_model_graph.py`.
+
+**Nota honesta (otra vez):** `build.nvidia.com`, `integrate.api.nvidia.com`
+y `api.ngc.nvidia.com` están bloqueados por la política de egress de esta
+sesión, así que no pude descargar el catálogo completo en vivo (100+
+modelos). El grafo que subí es un **seed parcial de ~32 modelos** verificados
+contra las specs OpenAPI reales de NVIDIA — no el catálogo completo. El
+script hace ambas cosas: sin `NVIDIA_API_KEY` genera este seed; con la key
+(y en una red que sí llegue a `integrate.api.nvidia.com`, como tu ROG) llama
+`GET /v1/models` y genera el grafo real y completo. Corre
+`NVIDIA_API_KEY=nvapi-... python3 scripts/build_model_graph.py` ahí para
+reemplazar el seed por el catálogo de verdad.
 
 ## Plugins completos incluidos
 
