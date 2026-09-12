@@ -119,11 +119,19 @@ actualiza los plugins.
 |---|---|---|
 | [`openmontage`](https://github.com/calesthio/OpenMontage) | Sistema de producción de video agéntico: describís el video en lenguaje natural y el agente investiga, escribe el guion, genera imágenes/video/música/narración, edita y renderiza (Remotion). 50+ skills propias (video gen con Veo/Kling/Seedance, TTS, música, ffmpeg, Three.js, etc.) | `bash install.sh new openmontage ~/proyectos/mi-video`, luego `cd` ahí y `make setup` (necesita Python 3.10+, FFmpeg, Node 18+) |
 | [`daily-stock-analysis`](https://github.com/ZhuLinsen/daily_stock_analysis) | Analiza acciones diariamente (A-share/HK/US/JP/KR/TW) con IA: cotizaciones+noticias+fundamentales → dashboard de decisión (compra/venta, riesgos) → push a WeChat Work/Feishu/Telegram/Discord/email. CLI + API REST + web + desktop | `bash install.sh new daily-stock-analysis ~/proyectos/stocks`, `pip install -r requirements.txt`, configura `.env` (mínimo 1 API key de LLM + `STOCK_LIST`), `python main.py --schedule` o Docker/GitHub Actions para correrlo diario |
+| [`omniroute`](https://github.com/diegosouzapw/OmniRoute) | Gateway de IA self-hosted: un endpoint OpenAI-compatible que rutea entre 356 proveedores (150+ tiers gratis, ~1.47B tokens/mes agregados), fallback automático, compresión de contexto, y MCP/A2A/REST/webhooks propios para que un agente controle el gateway mismo | `bash install.sh new omniroute ~/proyectos/mi-gateway`, luego `docker run -d -p 127.0.0.1:20128:20128 ... diegosouzapw/omniroute:latest` (o `npm install -g omniroute && omniroute setup`); apunta Claude Code al endpoint local o agrégalo como MCP server (`claude mcp add-server omniroute --type http --url http://localhost:20128/api/mcp/stream`) |
 
 A diferencia de skills/plugins, esto **no se instala globalmente** — cada
 `install.sh new` te da una copia fresca del template lista para un proyecto
 nuevo. API keys de proveedores (FAL, ElevenLabs, etc.) se configuran en el
 `.env` de esa copia, no en esta colección.
+
+**Nota sobre `omniroute`:** el proyecto es transparente sobre el riesgo —
+su propio README cataloga 13 de los 356 proveedores como "avoid" en su
+"terms-risk catalog" porque agregar/redistribuir sus tiers gratis puede
+violar los términos de esos proveedores específicos. La herramienta te deja
+decidir cuáles usar (el dashboard lo muestra), pero la responsabilidad de
+respetar los términos de cada proveedor es tuya, no de la herramienta.
 
 ## Self-installers incluidos
 

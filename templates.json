@@ -8,5 +8,10 @@
     "repo": "https://github.com/ZhuLinsen/daily_stock_analysis",
     "description": "Sistema de análisis diario de acciones (A-share/HK/US/JP/KR/TW) con IA: junta cotizaciones/noticias/fundamentales, genera un dashboard de decisión (compra/venta, riesgos, catalizadores) y lo empuja a WeChat Work/Feishu/Telegram/Discord/email. CLI + API REST + web + desktop.",
     "setupCommand": "pip install -r requirements.txt && cp .env.example .env   # edita .env: al menos 1 API key de LLM (ANTHROPIC_API_KEY/OPENAI_API_KEY/GEMINI_API_KEY/...) + STOCK_LIST, luego 'python main.py --help'"
+  },
+  "omniroute": {
+    "repo": "https://github.com/diegosouzapw/OmniRoute",
+    "description": "Gateway de IA self-hosted: un solo endpoint OpenAI-compatible que rutea entre 356 proveedores (150+ tiers gratis, ~1.47B tokens gratis/mes agregados), con fallback automático, compresión de contexto (15-95% menos tokens) y MCP/A2A/REST/webhooks propios para que un agente controle el gateway mismo.",
+    "setupCommand": "docker run -d --name omniroute --restart unless-stopped -p 127.0.0.1:20128:20128 -v omniroute-data:/app/data diegosouzapw/omniroute:latest   # o 'npm install -g omniroute && omniroute setup' — sube memoria del contenedor si vas a usarlo con Claude Code/Codex (ver docs/guides/DOCKER_GUIDE.md)"
   }
 }
