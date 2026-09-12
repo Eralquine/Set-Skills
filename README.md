@@ -77,6 +77,23 @@ bash install.sh --project /ruta/a/mi-proyecto
 | [`scrapegraph-mcp`](skills/scrapegraph-mcp/SKILL.md) | Extrae datos de páginas web describiendo en lenguaje natural qué quieres (sin CSS selectors), con crawl multi-página async, generación de JSON Schema, y monitors programados que avisan cuando una página cambia | API key de pago en [dashboard.scrapegraphai.com](https://dashboard.scrapegraphai.com) — servicio hosteado, no local |
 | [`best-skills-finder`](skills/best-skills-finder/SKILL.md) | Antes de armar una skill desde cero: busca si ya existe una buena en skills.sh/ClawHub/Tencent SkillHub (10,000+ skills, ranking actualizado a diario) — evita reinventar la rueda | Ninguno — datos abiertos (CSV) que se descargan en vivo de [LinklyAI/best-skills](https://github.com/LinklyAI/best-skills), nunca vendorizados (cambian a diario) |
 
+**Top 10 del ranking `best-skills-finder`** (instaladas el 2026-09-12, vía sus repos oficiales):
+
+| Skill | Qué hace | Fuente |
+|---|---|---|
+| [`find-skills`](skills/find-skills/SKILL.md) | Busca/instala skills desde la CLI oficial `npx skills` (skills.sh) | [vercel-labs/skills](https://github.com/vercel-labs/skills) |
+| [`agent-browser`](skills/agent-browser/SKILL.md) | Automatización de browser vía CDP para agentes (Chrome/Chromium, apps Electron, Slack, Vercel Sandbox) — CLI Rust nativa, sin Playwright/Puppeteer | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) (`npm i -g agent-browser && agent-browser install`) |
+| [`frontend-design`](skills/frontend-design/SKILL.md) | Guía de diseño visual intencional para UI nueva o rediseño — evita el look "default de IA" | [anthropics/skills](https://github.com/anthropics/skills) |
+| [`grill-me`](skills/grill-me/SKILL.md) | Interrogatorio implacable para afilar un plan o diseño antes de implementarlo | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| [`azure-ai`](skills/azure-ai/SKILL.md) | Azure AI Search, Speech, OpenAI, Document Intelligence — búsqueda vectorial/híbrida, STT/TTS, OCR | [microsoft/azure-skills](https://github.com/microsoft/azure-skills) (necesita `az` CLI autenticado) |
+| [`vercel-react-best-practices`](skills/vercel-react-best-practices/SKILL.md) | ~70 reglas de performance de React/Next.js de Vercel Engineering (rendering, bundling, async, server) | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| [`web-design-guidelines`](skills/web-design-guidelines/SKILL.md) | Audita código de UI contra guías de accesibilidad/UX | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| [`grill-with-docs`](skills/grill-with-docs/SKILL.md) | Como `grill-me`, pero además genera ADRs y glosario mientras interroga el plan | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| [`azure-compliance`](skills/azure-compliance/SKILL.md) | Auditorías de compliance/seguridad Azure con `azqr` + chequeo de expiración de Key Vault | [microsoft/azure-skills](https://github.com/microsoft/azure-skills) (necesita `az` CLI + `azqr`) |
+| [`azure-storage`](skills/azure-storage/SKILL.md) | Blob/File/Queue/Table Storage y Data Lake — tiers de acceso, lifecycle management | [microsoft/azure-skills](https://github.com/microsoft/azure-skills) (necesita `az` CLI autenticado) |
+
+Copiadas solo estas 10 (no los repos completos, que traen 30-80 skills más cada uno) — el ranking cambia a diario, así que si vuelves a correr `best-skills-finder` más adelante el top 10 puede ser distinto.
+
 Las 9 skills de OpenSEO comparten el mismo MCP server hosteado (`openseo`,
 `https://app.openseo.so/mcp`), agregado automáticamente por `install.sh`. La
 primera vez que Claude use una herramienta de OpenSEO te va a pedir
