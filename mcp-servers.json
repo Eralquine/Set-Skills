@@ -39,5 +39,12 @@
       "command": "npx",
       "args": ["-y", "codebase-memory-mcp"]
     }
+  },
+  "scrapegraph-mcp": {
+    "scrapegraph-mcp": {
+      "type": "http",
+      "url": "https://sgai-mcp-main.onrender.com",
+      "headers": { "X-API-Key": "${SGAI_API_KEY}" }
+    }
   }
 }
