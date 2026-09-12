@@ -41,6 +41,10 @@ guessed).
    `NVIDIA_API_KEY=... python3 scripts/build_model_graph.py` for the full,
    current catalog (it falls back to a ~32-model hand-verified seed list
    without a key — see the graph's own report for which mode produced it).
+   No API key handy but need the catalog anyway? `scripts/scrape_model_catalog.py`
+   uses the `scrapling-official` skill to browse `build.nvidia.com/models`
+   directly and capture the page's own internal API calls (more reliable
+   than scraping rendered HTML) — see that script's docstring.
 5. For chat/completions/embeddings, the transport is OpenAI-compatible
    enough that the official `openai` SDK works unmodified — just change
    `base_url` to `https://integrate.api.nvidia.com/v1` and `api_key` to the
