@@ -147,9 +147,13 @@ def write_graph_html(graph):
     graph_json = json.dumps(graph, ensure_ascii=False)
     n_entries = len([n for n in graph["nodes"] if n["type"] == "entry"])
     n_cats = len([n for n in graph["nodes"] if n["type"] == "category"])
+    n_sources = len([n for n in graph["nodes"] if n["type"] == "source"])
+    n_reqs = len([n for n in graph["nodes"] if n["type"] == "requirement"])
     html_doc = HTML_TEMPLATE.replace("__GRAPH_JSON__", graph_json)
     html_doc = html_doc.replace("__ENTRY_COUNT__", str(n_entries))
     html_doc = html_doc.replace("__CAT_COUNT__", str(n_cats))
+    html_doc = html_doc.replace("__SOURCE_COUNT__", str(n_sources))
+    html_doc = html_doc.replace("__REQ_COUNT__", str(n_reqs))
     with open(os.path.join(OUT_DIR, "graph.html"), "w") as f:
         f.write(html_doc)
 
@@ -158,60 +162,224 @@ HTML_TEMPLATE = """<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>Set-Skills Collection Graph</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill Atlas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-  :root { color-scheme: light dark; }
-  html, body { margin: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0b0e14; color: #e6e6e6; }
-  #app { display: flex; height: 100%; }
-  #sidebar { width: 340px; flex-shrink: 0; padding: 16px; box-sizing: border-box; overflow-y: auto; background: #11151d; border-right: 1px solid #232a36; }
-  #canvas-wrap { flex: 1; position: relative; }
-  h1 { font-size: 15px; margin: 0 0 4px; }
-  .sub { font-size: 12px; color: #8b93a3; margin-bottom: 16px; }
-  label { font-size: 12px; color: #8b93a3; display: block; margin: 12px 0 4px; }
-  select, input[type=text] { width: 100%; box-sizing: border-box; padding: 6px 8px; background: #1a2029; border: 1px solid #2a3140; color: #e6e6e6; border-radius: 6px; font-size: 13px; }
-  #legend { margin-top: 16px; font-size: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  #detail { margin-top: 16px; padding-top: 16px; border-top: 1px solid #232a36; font-size: 13px; line-height: 1.5; }
-  #detail .placeholder { color: #5a6270; font-size: 12px; }
-  #stats { font-size: 11px; color: #5a6270; margin-top: 16px; }
+  :root {
+    --bg: #eef1f6;
+    --surface: #ffffff;
+    --surface-2: #e2e8f1;
+    --ink: #1b2431;
+    --muted: #5b6b82;
+    --line: #c9d2de;
+    --accent: #2f5f92;
+    --accent-soft: #dbe6f2;
+    --cat: #a9782f;
+    --entry: #2f5f92;
+    --source: #3f7d5c;
+    --req: #a1473f;
+    --shadow: 0 1px 2px rgba(27,36,49,.06), 0 8px 24px rgba(27,36,49,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1520;
+      --surface: #161e2b;
+      --surface-2: #1e2735;
+      --ink: #e4e9f1;
+      --muted: #93a1b5;
+      --line: #2b3547;
+      --accent: #79aee0;
+      --accent-soft: #223349;
+      --cat: #d3a35f;
+      --entry: #79aee0;
+      --source: #6bb790;
+      --req: #d67a70;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1520;
+    --surface: #161e2b;
+    --surface-2: #1e2735;
+    --ink: #e4e9f1;
+    --muted: #93a1b5;
+    --line: #2b3547;
+    --accent: #79aee0;
+    --accent-soft: #223349;
+    --cat: #d3a35f;
+    --entry: #79aee0;
+    --source: #6bb790;
+    --req: #d67a70;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace; }
+
+  .atlas-shell { display: flex; min-height: 100dvh; }
+
+  .legend-panel {
+    width: 340px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    padding: 28px 22px;
+    overflow-y: auto;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .subtitle {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 22px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field-label {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  select, input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .legend-key {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0 22px;
+    padding: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+  .legend-row .count { margin-left: auto; font-family: "IBM Plex Mono", monospace; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .swatch { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
+  #detail {
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    line-height: 1.55;
+    min-height: 64px;
+  }
+  #detail .card {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 12px;
+  }
+  #detail .kind {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  #detail .placeholder { color: var(--muted); font-size: 12px; }
+
+  .map-panel {
+    flex: 1;
+    position: relative;
+    background-color: var(--bg);
+    background-image: radial-gradient(var(--line) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
   svg { width: 100%; height: 100%; display: block; }
-  .link { stroke: #2a3140; stroke-width: 1px; }
-  .node circle { stroke: #0b0e14; stroke-width: 1px; cursor: pointer; }
-  .node text { font-size: 9px; fill: #aab2c0; pointer-events: none; }
+  .link { stroke: var(--line); stroke-width: 1.1px; }
+  .node circle { stroke: var(--bg); stroke-width: 1.5px; cursor: pointer; }
+  .node text {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    fill: var(--ink);
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: var(--bg);
+    stroke-width: 2.5px;
+  }
+
+  @media (max-width: 760px) {
+    .atlas-shell { flex-direction: column; }
+    .legend-panel { width: 100%; max-height: 46vh; border-right: none; border-bottom: 1px solid var(--line); }
+    .map-panel { min-height: 54vh; }
+  }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="sidebar">
-    <h1>Set-Skills Collection Graph</h1>
-    <div class="sub">__ENTRY_COUNT__ entradas · __CAT_COUNT__ categorías</div>
-    <label for="modeFilter">Vista</label>
-    <select id="modeFilter">
-      <option value="category">Por categoría</option>
-      <option value="need">Por requisito</option>
-    </select>
-    <label for="valueFilter">Filtro</label>
-    <select id="valueFilter"></select>
-    <label for="search">Buscar entrada</label>
-    <input type="text" id="search" placeholder="ej. azure, scraping, seo...">
-    <div id="legend">
-      <div class="legend-item"><span class="dot" style="background:#ffb454"></span> Categoría</div>
-      <div class="legend-item"><span class="dot" style="background:#6cb6ff"></span> Skill/plugin/template</div>
-      <div class="legend-item"><span class="dot" style="background:#7ee787"></span> Fuente (repo/org)</div>
-      <div class="legend-item"><span class="dot" style="background:#f97583"></span> Requisito</div>
+
+<div class="atlas-shell">
+  <aside class="legend-panel">
+    <p class="eyebrow">Set-Skills &middot; atlas de la colecci&oacute;n</p>
+    <h1>Skill Atlas</h1>
+    <p class="subtitle" id="stats">__ENTRY_COUNT__ entradas &middot; __CAT_COUNT__ categor&iacute;as &middot; __SOURCE_COUNT__ fuentes</p>
+
+    <div class="field">
+      <label class="field-label" for="modeFilter">Vista</label>
+      <select id="modeFilter">
+        <option value="category">Por categor&iacute;a</option>
+        <option value="need">Por requisito</option>
+      </select>
     </div>
-    <div id="detail"><div class="placeholder">Click un nodo para ver detalles.</div></div>
-    <div id="stats"></div>
-  </div>
-  <div id="canvas-wrap"><svg></svg></div>
+    <div class="field">
+      <label class="field-label" for="valueFilter">Filtro</label>
+      <select id="valueFilter"></select>
+    </div>
+    <div class="field">
+      <label class="field-label" for="search">Buscar entrada</label>
+      <input type="text" id="search" placeholder="ej. azure, scraping, seo...">
+    </div>
+
+    <div class="legend-key">
+      <div class="legend-row"><span class="swatch" style="background:var(--cat)"></span> Categor&iacute;a <span class="count mono">__CAT_COUNT__</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--entry)"></span> Skill / plugin / template <span class="count mono">__ENTRY_COUNT__</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--source)"></span> Fuente (repo/org) <span class="count mono">__SOURCE_COUNT__</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--req)"></span> Requisito <span class="count mono">__REQ_COUNT__</span></div>
+    </div>
+
+    <div id="detail"><div class="placeholder">Click un nodo del mapa para ver detalles.</div></div>
+  </aside>
+
+  <main class="map-panel"><svg></svg></main>
 </div>
+
 <script id="graph-data" type="application/json">__GRAPH_JSON__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 const graph = JSON.parse(document.getElementById('graph-data').textContent);
 const allNodes = graph.nodes, allEdges = graph.edges;
-document.getElementById('stats').textContent = `${allNodes.length} nodos · ${allEdges.length} conexiones`;
 
 const modeSelect = document.getElementById('modeFilter');
 const valueSelect = document.getElementById('valueFilter');
@@ -221,8 +389,12 @@ const g = svg.append('g');
 svg.call(d3.zoom().scaleExtent([0.1, 6]).on('zoom', (ev) => g.attr('transform', ev.transform)));
 let simulation;
 
-function color(type) {
-  return type === 'category' ? '#ffb454' : type === 'source' ? '#7ee787' : type === 'requirement' ? '#f97583' : '#6cb6ff';
+function nodeColor(type) {
+  const styles = getComputedStyle(document.documentElement);
+  if (type === 'category') return styles.getPropertyValue('--cat').trim();
+  if (type === 'source') return styles.getPropertyValue('--source').trim();
+  if (type === 'requirement') return styles.getPropertyValue('--req').trim();
+  return styles.getPropertyValue('--entry').trim();
 }
 function radius(type) { return type === 'entry' ? 6 : 9; }
 
@@ -233,11 +405,8 @@ function populateValueSelect() {
 }
 
 function showDetail(n) {
-  if (n.type === 'entry') {
-    detail.innerHTML = `<b>${n.label}</b><br>${n.kindLabel || n.kind}`;
-  } else {
-    detail.innerHTML = `<b>${n.label}</b><br><span class="placeholder">${n.type}</span>`;
-  }
+  const kind = n.type === 'entry' ? (n.kindLabel || n.kind) : n.type;
+  detail.innerHTML = `<div class="card"><b>${n.label}</b><br><span class="kind">${kind}</span></div>`;
 }
 
 function render() {
@@ -266,7 +435,7 @@ function render() {
       .on('start', (ev, d) => { if (!ev.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
       .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
       .on('end', (ev, d) => { if (!ev.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
-  node.append('circle').attr('r', d => radius(d.type)).attr('fill', d => color(d.type)).on('click', (ev, d) => showDetail(d));
+  node.append('circle').attr('r', d => radius(d.type)).attr('fill', d => nodeColor(d.type)).on('click', (ev, d) => showDetail(d));
   node.append('text').attr('dx', d => radius(d.type) + 3).attr('dy', 3).text(d => d.label);
   simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(edges).id(d => d.id).distance(55).strength(0.35))

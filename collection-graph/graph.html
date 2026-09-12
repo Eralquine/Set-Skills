@@ -2,60 +2,224 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Set-Skills Collection Graph</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill Atlas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-  :root { color-scheme: light dark; }
-  html, body { margin: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0b0e14; color: #e6e6e6; }
-  #app { display: flex; height: 100%; }
-  #sidebar { width: 340px; flex-shrink: 0; padding: 16px; box-sizing: border-box; overflow-y: auto; background: #11151d; border-right: 1px solid #232a36; }
-  #canvas-wrap { flex: 1; position: relative; }
-  h1 { font-size: 15px; margin: 0 0 4px; }
-  .sub { font-size: 12px; color: #8b93a3; margin-bottom: 16px; }
-  label { font-size: 12px; color: #8b93a3; display: block; margin: 12px 0 4px; }
-  select, input[type=text] { width: 100%; box-sizing: border-box; padding: 6px 8px; background: #1a2029; border: 1px solid #2a3140; color: #e6e6e6; border-radius: 6px; font-size: 13px; }
-  #legend { margin-top: 16px; font-size: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  #detail { margin-top: 16px; padding-top: 16px; border-top: 1px solid #232a36; font-size: 13px; line-height: 1.5; }
-  #detail .placeholder { color: #5a6270; font-size: 12px; }
-  #stats { font-size: 11px; color: #5a6270; margin-top: 16px; }
+  :root {
+    --bg: #eef1f6;
+    --surface: #ffffff;
+    --surface-2: #e2e8f1;
+    --ink: #1b2431;
+    --muted: #5b6b82;
+    --line: #c9d2de;
+    --accent: #2f5f92;
+    --accent-soft: #dbe6f2;
+    --cat: #a9782f;
+    --entry: #2f5f92;
+    --source: #3f7d5c;
+    --req: #a1473f;
+    --shadow: 0 1px 2px rgba(27,36,49,.06), 0 8px 24px rgba(27,36,49,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1520;
+      --surface: #161e2b;
+      --surface-2: #1e2735;
+      --ink: #e4e9f1;
+      --muted: #93a1b5;
+      --line: #2b3547;
+      --accent: #79aee0;
+      --accent-soft: #223349;
+      --cat: #d3a35f;
+      --entry: #79aee0;
+      --source: #6bb790;
+      --req: #d67a70;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1520;
+    --surface: #161e2b;
+    --surface-2: #1e2735;
+    --ink: #e4e9f1;
+    --muted: #93a1b5;
+    --line: #2b3547;
+    --accent: #79aee0;
+    --accent-soft: #223349;
+    --cat: #d3a35f;
+    --entry: #79aee0;
+    --source: #6bb790;
+    --req: #d67a70;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace; }
+
+  .atlas-shell { display: flex; min-height: 100dvh; }
+
+  .legend-panel {
+    width: 340px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+    padding: 28px 22px;
+    overflow-y: auto;
+  }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    text-wrap: balance;
+  }
+  .subtitle {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 22px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field-label {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  select, input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .legend-key {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 4px 0 22px;
+    padding: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+  .legend-row .count { margin-left: auto; font-family: "IBM Plex Mono", monospace; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .swatch { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
+  #detail {
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    line-height: 1.55;
+    min-height: 64px;
+  }
+  #detail .card {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 12px;
+  }
+  #detail .kind {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  #detail .placeholder { color: var(--muted); font-size: 12px; }
+
+  .map-panel {
+    flex: 1;
+    position: relative;
+    background-color: var(--bg);
+    background-image: radial-gradient(var(--line) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
   svg { width: 100%; height: 100%; display: block; }
-  .link { stroke: #2a3140; stroke-width: 1px; }
-  .node circle { stroke: #0b0e14; stroke-width: 1px; cursor: pointer; }
-  .node text { font-size: 9px; fill: #aab2c0; pointer-events: none; }
+  .link { stroke: var(--line); stroke-width: 1.1px; }
+  .node circle { stroke: var(--bg); stroke-width: 1.5px; cursor: pointer; }
+  .node text {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    fill: var(--ink);
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: var(--bg);
+    stroke-width: 2.5px;
+  }
+
+  @media (max-width: 760px) {
+    .atlas-shell { flex-direction: column; }
+    .legend-panel { width: 100%; max-height: 46vh; border-right: none; border-bottom: 1px solid var(--line); }
+    .map-panel { min-height: 54vh; }
+  }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="sidebar">
-    <h1>Set-Skills Collection Graph</h1>
-    <div class="sub">38 entradas · 18 categorías</div>
-    <label for="modeFilter">Vista</label>
-    <select id="modeFilter">
-      <option value="category">Por categoría</option>
-      <option value="need">Por requisito</option>
-    </select>
-    <label for="valueFilter">Filtro</label>
-    <select id="valueFilter"></select>
-    <label for="search">Buscar entrada</label>
-    <input type="text" id="search" placeholder="ej. azure, scraping, seo...">
-    <div id="legend">
-      <div class="legend-item"><span class="dot" style="background:#ffb454"></span> Categoría</div>
-      <div class="legend-item"><span class="dot" style="background:#6cb6ff"></span> Skill/plugin/template</div>
-      <div class="legend-item"><span class="dot" style="background:#7ee787"></span> Fuente (repo/org)</div>
-      <div class="legend-item"><span class="dot" style="background:#f97583"></span> Requisito</div>
+
+<div class="atlas-shell">
+  <aside class="legend-panel">
+    <p class="eyebrow">Set-Skills &middot; atlas de la colecci&oacute;n</p>
+    <h1>Skill Atlas</h1>
+    <p class="subtitle" id="stats">38 entradas &middot; 18 categor&iacute;as &middot; 24 fuentes</p>
+
+    <div class="field">
+      <label class="field-label" for="modeFilter">Vista</label>
+      <select id="modeFilter">
+        <option value="category">Por categor&iacute;a</option>
+        <option value="need">Por requisito</option>
+      </select>
     </div>
-    <div id="detail"><div class="placeholder">Click un nodo para ver detalles.</div></div>
-    <div id="stats"></div>
-  </div>
-  <div id="canvas-wrap"><svg></svg></div>
+    <div class="field">
+      <label class="field-label" for="valueFilter">Filtro</label>
+      <select id="valueFilter"></select>
+    </div>
+    <div class="field">
+      <label class="field-label" for="search">Buscar entrada</label>
+      <input type="text" id="search" placeholder="ej. azure, scraping, seo...">
+    </div>
+
+    <div class="legend-key">
+      <div class="legend-row"><span class="swatch" style="background:var(--cat)"></span> Categor&iacute;a <span class="count mono">18</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--entry)"></span> Skill / plugin / template <span class="count mono">38</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--source)"></span> Fuente (repo/org) <span class="count mono">24</span></div>
+      <div class="legend-row"><span class="swatch" style="background:var(--req)"></span> Requisito <span class="count mono">8</span></div>
+    </div>
+
+    <div id="detail"><div class="placeholder">Click un nodo del mapa para ver detalles.</div></div>
+  </aside>
+
+  <main class="map-panel"><svg></svg></main>
 </div>
+
 <script id="graph-data" type="application/json">{"meta": {"source": "Set-Skills collection, hand-classified", "node_count": 88, "edge_count": 131}, "nodes": [{"id": "cat:design", "label": "design", "type": "category"}, {"id": "entry:plasmic-designer", "label": "plasmic-designer", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:plasmicapp", "label": "plasmicapp", "type": "source"}, {"id": "need:mcp-server", "label": "MCP server", "type": "requirement"}, {"id": "cat:seo", "label": "seo", "type": "category"}, {"id": "entry:competitive-landscape", "label": "competitive-landscape", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:every-app", "label": "every-app", "type": "source"}, {"id": "need:cloud-account", "label": "Cloud account (OAuth/login)", "type": "requirement"}, {"id": "entry:competitor-analysis", "label": "competitor-analysis", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:keyword-clustering", "label": "keyword-clustering", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:keyword-research", "label": "keyword-research", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:link-prospecting", "label": "link-prospecting", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:local-seo", "label": "local-seo", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:seo-audit", "label": "seo-audit", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:seo-coach", "label": "seo-coach", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:seo-project-setup", "label": "seo-project-setup", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "cat:api-discovery", "label": "api-discovery", "type": "category"}, {"id": "entry:api-finder", "label": "api-finder", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:public-apis", "label": "public-apis", "type": "source"}, {"id": "need:no-requirement", "label": "No requirement (local/free)", "type": "requirement"}, {"id": "cat:knowledge-graph", "label": "knowledge-graph", "type": "category"}, {"id": "entry:graphify", "label": "graphify", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:Graphify-Labs", "label": "Graphify-Labs", "type": "source"}, {"id": "need:cli-install", "label": "Self-installing CLI", "type": "requirement"}, {"id": "cat:llm-api", "label": "llm-api", "type": "category"}, {"id": "entry:nvidia-nim", "label": "nvidia-nim", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:NVIDIA", "label": "NVIDIA", "type": "source"}, {"id": "need:api-key-free", "label": "API key (free tier)", "type": "requirement"}, {"id": "cat:voice-tts", "label": "voice-tts", "type": "category"}, {"id": "entry:omnivoice", "label": "omnivoice", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:k2-fsa", "label": "k2-fsa", "type": "source"}, {"id": "need:gpu-required", "label": "GPU required", "type": "requirement"}, {"id": "entry:penpot", "label": "penpot", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:penpot", "label": "penpot", "type": "source"}, {"id": "cat:database", "label": "database", "type": "category"}, {"id": "entry:turso", "label": "turso", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:tursodatabase", "label": "tursodatabase", "type": "source"}, {"id": "cat:code-search-memory", "label": "code-search-memory", "type": "category"}, {"id": "entry:codebase-memory-mcp", "label": "codebase-memory-mcp", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:DeusData", "label": "DeusData", "type": "source"}, {"id": "cat:scraping-research", "label": "scraping-research", "type": "category"}, {"id": "entry:scrapling-official", "label": "scrapling-official", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:D4Vinci", "label": "D4Vinci", "type": "source"}, {"id": "entry:agent-reach", "label": "agent-reach", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:Panniantong", "label": "Panniantong", "type": "source"}, {"id": "need:user-cookies", "label": "User's own login cookies", "type": "requirement"}, {"id": "entry:scrapegraph-mcp", "label": "scrapegraph-mcp", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:ScrapeGraphAI", "label": "ScrapeGraphAI", "type": "source"}, {"id": "need:api-key-paid", "label": "API key (paid)", "type": "requirement"}, {"id": "cat:skill-discovery", "label": "skill-discovery", "type": "category"}, {"id": "entry:best-skills-finder", "label": "best-skills-finder", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:LinklyAI", "label": "LinklyAI", "type": "source"}, {"id": "entry:find-skills", "label": "find-skills", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:vercel-labs", "label": "vercel-labs", "type": "source"}, {"id": "cat:browser-automation", "label": "browser-automation", "type": "category"}, {"id": "entry:agent-browser", "label": "agent-browser", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:frontend-design", "label": "frontend-design", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:anthropics", "label": "anthropics", "type": "source"}, {"id": "entry:web-design-guidelines", "label": "web-design-guidelines", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "cat:dev-productivity", "label": "dev-productivity", "type": "category"}, {"id": "entry:grill-me", "label": "grill-me", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:mattpocock", "label": "mattpocock", "type": "source"}, {"id": "entry:grill-with-docs", "label": "grill-with-docs", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "cat:cloud-azure", "label": "cloud-azure", "type": "category"}, {"id": "entry:azure-ai", "label": "azure-ai", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "source:microsoft", "label": "microsoft", "type": "source"}, {"id": "entry:azure-compliance", "label": "azure-compliance", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "entry:azure-storage", "label": "azure-storage", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "cat:react-frontend", "label": "react-frontend", "type": "category"}, {"id": "entry:vercel-react-best-practices", "label": "vercel-react-best-practices", "type": "entry", "kind": "skill", "kindLabel": "skills/"}, {"id": "cat:payments", "label": "payments", "type": "category"}, {"id": "entry:pagokit", "label": "pagokit", "type": "entry", "kind": "plugin", "kindLabel": "plugins.json"}, {"id": "source:hainrixz", "label": "hainrixz", "type": "source"}, {"id": "entry:firecrawl", "label": "firecrawl", "type": "entry", "kind": "plugin", "kindLabel": "plugins.json"}, {"id": "source:firecrawl", "label": "firecrawl", "type": "source"}, {"id": "cat:security", "label": "security", "type": "category"}, {"id": "entry:cybersecurity-skills", "label": "cybersecurity-skills", "type": "entry", "kind": "plugin", "kindLabel": "plugins.json"}, {"id": "source:mukul975", "label": "mukul975", "type": "source"}, {"id": "cat:video-production", "label": "video-production", "type": "category"}, {"id": "entry:openmontage", "label": "openmontage", "type": "entry", "kind": "template", "kindLabel": "templates.json"}, {"id": "source:calesthio", "label": "calesthio", "type": "source"}, {"id": "cat:finance", "label": "finance", "type": "category"}, {"id": "entry:daily-stock-analysis", "label": "daily-stock-analysis", "type": "entry", "kind": "template", "kindLabel": "templates.json"}, {"id": "source:ZhuLinsen", "label": "ZhuLinsen", "type": "source"}, {"id": "entry:omniroute", "label": "omniroute", "type": "entry", "kind": "template", "kindLabel": "templates.json"}, {"id": "source:diegosouzapw", "label": "diegosouzapw", "type": "source"}, {"id": "entry:gstack", "label": "gstack", "type": "entry", "kind": "self-installer", "kindLabel": "self-installers.json"}, {"id": "source:garrytan", "label": "garrytan", "type": "source"}], "edges": [{"source": "cat:design", "target": "entry:plasmic-designer", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:plasmic-designer", "target": "source:plasmicapp", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:plasmic-designer", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:competitive-landscape", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:competitive-landscape", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:competitive-landscape", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:competitive-landscape", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:competitor-analysis", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:competitor-analysis", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:competitor-analysis", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:competitor-analysis", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:keyword-clustering", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:keyword-clustering", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:keyword-clustering", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:keyword-clustering", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:keyword-research", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:keyword-research", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:keyword-research", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:keyword-research", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:link-prospecting", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:link-prospecting", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:link-prospecting", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:link-prospecting", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:local-seo", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:local-seo", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:local-seo", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:local-seo", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:seo-audit", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:seo-audit", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:seo-audit", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:seo-audit", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:seo-coach", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:seo-coach", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:seo-coach", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:seo-coach", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:seo", "target": "entry:seo-project-setup", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:seo-project-setup", "target": "source:every-app", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:seo-project-setup", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:seo-project-setup", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:api-discovery", "target": "entry:api-finder", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:api-finder", "target": "source:public-apis", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:api-finder", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:knowledge-graph", "target": "entry:graphify", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:graphify", "target": "source:Graphify-Labs", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:graphify", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:llm-api", "target": "entry:nvidia-nim", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:nvidia-nim", "target": "source:NVIDIA", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:nvidia-nim", "target": "need:api-key-free", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:voice-tts", "target": "entry:omnivoice", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:omnivoice", "target": "source:k2-fsa", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:omnivoice", "target": "need:gpu-required", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:design", "target": "entry:penpot", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:penpot", "target": "source:penpot", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:penpot", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:penpot", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:database", "target": "entry:turso", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:turso", "target": "source:tursodatabase", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:turso", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:code-search-memory", "target": "entry:codebase-memory-mcp", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:codebase-memory-mcp", "target": "source:DeusData", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:codebase-memory-mcp", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:codebase-memory-mcp", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:scraping-research", "target": "entry:scrapling-official", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:scrapling-official", "target": "source:D4Vinci", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:scrapling-official", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:scraping-research", "target": "entry:agent-reach", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:agent-reach", "target": "source:Panniantong", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:agent-reach", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:agent-reach", "target": "need:user-cookies", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:scraping-research", "target": "entry:scrapegraph-mcp", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:scrapegraph-mcp", "target": "source:ScrapeGraphAI", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:scrapegraph-mcp", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:scrapegraph-mcp", "target": "need:api-key-paid", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:skill-discovery", "target": "entry:best-skills-finder", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:best-skills-finder", "target": "source:LinklyAI", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:best-skills-finder", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:skill-discovery", "target": "entry:find-skills", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:find-skills", "target": "source:vercel-labs", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:find-skills", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:browser-automation", "target": "entry:agent-browser", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:agent-browser", "target": "source:vercel-labs", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:agent-browser", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:design", "target": "entry:frontend-design", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:frontend-design", "target": "source:anthropics", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:frontend-design", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:design", "target": "entry:web-design-guidelines", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:web-design-guidelines", "target": "source:vercel-labs", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:web-design-guidelines", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:dev-productivity", "target": "entry:grill-me", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:grill-me", "target": "source:mattpocock", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:grill-me", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:dev-productivity", "target": "entry:grill-with-docs", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:grill-with-docs", "target": "source:mattpocock", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:grill-with-docs", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:cloud-azure", "target": "entry:azure-ai", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:azure-ai", "target": "source:microsoft", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:azure-ai", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:azure-ai", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:cloud-azure", "target": "entry:azure-compliance", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:azure-compliance", "target": "source:microsoft", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:azure-compliance", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:azure-compliance", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:cloud-azure", "target": "entry:azure-storage", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:azure-storage", "target": "source:microsoft", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:azure-storage", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:azure-storage", "target": "need:cloud-account", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:react-frontend", "target": "entry:vercel-react-best-practices", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:vercel-react-best-practices", "target": "source:vercel-labs", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:vercel-react-best-practices", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:payments", "target": "entry:pagokit", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:pagokit", "target": "source:hainrixz", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:pagokit", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:scraping-research", "target": "entry:firecrawl", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:firecrawl", "target": "source:firecrawl", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:firecrawl", "target": "need:mcp-server", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "entry:firecrawl", "target": "need:api-key-free", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:security", "target": "entry:cybersecurity-skills", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:cybersecurity-skills", "target": "source:mukul975", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:cybersecurity-skills", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:video-production", "target": "entry:openmontage", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:openmontage", "target": "source:calesthio", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:openmontage", "target": "need:api-key-paid", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:finance", "target": "entry:daily-stock-analysis", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:daily-stock-analysis", "target": "source:ZhuLinsen", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:daily-stock-analysis", "target": "need:api-key-free", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:llm-api", "target": "entry:omniroute", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:omniroute", "target": "source:diegosouzapw", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:omniroute", "target": "need:no-requirement", "relation": "needs", "confidence": "EXTRACTED"}, {"source": "cat:dev-productivity", "target": "entry:gstack", "relation": "contains", "confidence": "EXTRACTED"}, {"source": "entry:gstack", "target": "source:garrytan", "relation": "from", "confidence": "EXTRACTED"}, {"source": "entry:gstack", "target": "need:cli-install", "relation": "needs", "confidence": "EXTRACTED"}]}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 const graph = JSON.parse(document.getElementById('graph-data').textContent);
 const allNodes = graph.nodes, allEdges = graph.edges;
-document.getElementById('stats').textContent = `${allNodes.length} nodos · ${allEdges.length} conexiones`;
 
 const modeSelect = document.getElementById('modeFilter');
 const valueSelect = document.getElementById('valueFilter');
@@ -65,8 +229,12 @@ const g = svg.append('g');
 svg.call(d3.zoom().scaleExtent([0.1, 6]).on('zoom', (ev) => g.attr('transform', ev.transform)));
 let simulation;
 
-function color(type) {
-  return type === 'category' ? '#ffb454' : type === 'source' ? '#7ee787' : type === 'requirement' ? '#f97583' : '#6cb6ff';
+function nodeColor(type) {
+  const styles = getComputedStyle(document.documentElement);
+  if (type === 'category') return styles.getPropertyValue('--cat').trim();
+  if (type === 'source') return styles.getPropertyValue('--source').trim();
+  if (type === 'requirement') return styles.getPropertyValue('--req').trim();
+  return styles.getPropertyValue('--entry').trim();
 }
 function radius(type) { return type === 'entry' ? 6 : 9; }
 
@@ -77,11 +245,8 @@ function populateValueSelect() {
 }
 
 function showDetail(n) {
-  if (n.type === 'entry') {
-    detail.innerHTML = `<b>${n.label}</b><br>${n.kindLabel || n.kind}`;
-  } else {
-    detail.innerHTML = `<b>${n.label}</b><br><span class="placeholder">${n.type}</span>`;
-  }
+  const kind = n.type === 'entry' ? (n.kindLabel || n.kind) : n.type;
+  detail.innerHTML = `<div class="card"><b>${n.label}</b><br><span class="kind">${kind}</span></div>`;
 }
 
 function render() {
@@ -110,7 +275,7 @@ function render() {
       .on('start', (ev, d) => { if (!ev.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
       .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
       .on('end', (ev, d) => { if (!ev.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
-  node.append('circle').attr('r', d => radius(d.type)).attr('fill', d => color(d.type)).on('click', (ev, d) => showDetail(d));
+  node.append('circle').attr('r', d => radius(d.type)).attr('fill', d => nodeColor(d.type)).on('click', (ev, d) => showDetail(d));
   node.append('text').attr('dx', d => radius(d.type) + 3).attr('dy', 3).text(d => d.label);
   simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(edges).id(d => d.id).distance(55).strength(0.35))
